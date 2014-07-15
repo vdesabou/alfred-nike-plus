@@ -278,6 +278,24 @@ if (mb_strlen($query) < 3 ||
 		$w->result(uniqid(), serialize(array('update_library' /*other_action*/ ,'' /* url */)), 'Reset Library (delete and recreate your entire library)', "When done you'll receive a notification. you can check progress by invoking the workflow again", './images/update.png', 'yes', null, '');
 
 		$w->result(uniqid(), serialize(array('credentials' /*other_action*/ ,'' /* url */)), 'Change your Nike Plus credentials', "Your password will be stored safely in your keychain", './images/credentials.png', 'yes', null, '');
+		
+		if ($use_miles == true) {
+			$w->result(uniqid(), serialize(array('disable_use_miles' /*other_action*/ ,'' /* url */)), "Disable use of Miles", array(
+					"Use KM instead of Miles",
+					'alt' => 'Not Available',
+					'cmd' => 'Not Available',
+					'shift' => 'Not Available',
+					'fn' => 'Not Available',
+					'ctrl' => 'Not Available'), './images/uncheck.png', 'yes', null, '');
+		} else {
+			$w->result(uniqid(), serialize(array('enable_use_miles' /*other_action*/ ,'' /* url */)), "Enable use of Miles", array(
+					"Use Miles instead of KM",
+					'alt' => 'Not Available',
+					'cmd' => 'Not Available',
+					'shift' => 'Not Available',
+					'fn' => 'Not Available',
+					'ctrl' => 'Not Available'), './images/check.png', 'yes', null, '');
+		}
 	}
 } else {
 	////////////

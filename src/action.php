@@ -40,6 +40,18 @@ if ($other_action == "update_library") {
   
 	$command_output = exec("Authenticate.app/Contents/MacOS/Authenticate 2>&1");
 	return;	
+}else if ($other_action == "enable_use_miles") {
+	$setSettings = "update settings set use_miles=1";
+	$dbfile = $w->data() . "/settings.db";
+	exec("sqlite3 \"$dbfile\" \"$setSettings\"");
+	displayNotificationWithArtwork("Miles is now used",'./images/check.png');
+	return;
+} else if ($other_action == "disable_use_miles") {
+	$setSettings = "update settings set use_miles=0";
+	$dbfile = $w->data() . "/settings.db";
+	exec("sqlite3 \"$dbfile\" \"$setSettings\"");
+	displayNotificationWithArtwork("KM is now used",'./images/uncheck.png');
+	return;
 }
 
 if($url != "") {
