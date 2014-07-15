@@ -32,17 +32,8 @@ if (file_exists($w->data() . '/update_library_in_progress')) {
 		else {
 			$w->result(uniqid(), '', 'There is a problem, the initialization phase last more than 5 minutes', 'Follow the steps below:', './images/warning.png', 'no', null, '');
 
-			$w->result(uniqid(), '', "1/ Kill update library", "You can kill it by using spot_mini_kill_update command", '05F86AA1-D3EE-4409-9A58-898B36FFE503.png', 'no', null, '');
+			$w->result(uniqid(), '', "Kill update library", "You can kill it by using nikeplus_kill_update command",  'E1E1B9A5-C03D-4072-B6D7-6F6CBBBC112F.png', 'no', null, '');
 
-			$w->result(uniqid(), '', "2/ Open Spotify Mini Player App <spotify:app:miniplayer>", array(
-					"Go to the Spotify Mini Player App in Spotify.",
-					'alt' => 'Not Available',
-					'cmd' => 'Not Available',
-					'shift' => 'Not Available',
-					'fn' => 'Not Available',
-					'ctrl' => 'Not Available'), './images/' . 'black' . '/' . 'app_miniplayer.png', 'no', null, '');
-
-			$w->result(uniqid(), '', '3/ Copy paste the Debug output and provide it to the author', 'Also provide a tgz file with spot_mini_debug command', 'CEF36AB9-7CC2-4765-BF84-751E88B69023.png', 'no', null, '');
 		}
 	}
 	else {

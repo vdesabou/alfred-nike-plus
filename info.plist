@@ -41,6 +41,17 @@
 				<string></string>
 			</dict>
 		</array>
+		<key>E1E1B9A5-C03D-4072-B6D7-6F6CBBBC112F</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>1E4FBE4D-F098-48A4-8F97-531E4E0FEB36</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+			</dict>
+		</array>
 	</dict>
 	<key>createdby</key>
 	<string>vdesabou</string>
@@ -133,6 +144,44 @@
 			<key>version</key>
 			<integer>0</integer>
 		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>escaping</key>
+				<integer>127</integer>
+				<key>script</key>
+				<string>php -f ./src/kill_update.php</string>
+				<key>type</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>1E4FBE4D-F098-48A4-8F97-531E4E0FEB36</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argumenttype</key>
+				<integer>2</integer>
+				<key>keyword</key>
+				<string>nikeplus_kill_update</string>
+				<key>subtext</key>
+				<string>use it if the library update seems stuck</string>
+				<key>text</key>
+				<string>Kill update library</string>
+				<key>withspace</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.keyword</string>
+			<key>uid</key>
+			<string>E1E1B9A5-C03D-4072-B6D7-6F6CBBBC112F</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
 	</array>
 	<key>readme</key>
 	<string></string>
@@ -142,6 +191,11 @@
 		<dict>
 			<key>ypos</key>
 			<real>10</real>
+		</dict>
+		<key>1E4FBE4D-F098-48A4-8F97-531E4E0FEB36</key>
+		<dict>
+			<key>ypos</key>
+			<real>130</real>
 		</dict>
 		<key>61B572CA-BEE7-4A11-8164-0280F9510AB9</key>
 		<dict>
@@ -157,6 +211,11 @@
 		<dict>
 			<key>ypos</key>
 			<real>10</real>
+		</dict>
+		<key>E1E1B9A5-C03D-4072-B6D7-6F6CBBBC112F</key>
+		<dict>
+			<key>ypos</key>
+			<real>130</real>
 		</dict>
 	</dict>
 	<key>webaddress</key>
