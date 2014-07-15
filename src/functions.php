@@ -124,7 +124,7 @@ function padNumber($number){
  * @return void
  */
 function getMonthName($month){
-	$mons = array(1 => "Jan", 2 => "Feb", 3 => "Mar", 4 => "Apr", 5 => "May", 6 => "Jun", 7 => "Jul", 8 => "Aug", 9 => "Sep", 10 => "Oct", 11 => "Nov", 12 => "Dec");
+	$mons = array(1 => "January", 2 => "February", 3 => "March", 4 => "April", 5 => "May", 6 => "June", 7 => "July", 8 => "August", 9 => "September", 10 => "October", 11 => "November", 12 => "December");
 	
 	return $mons[$month];
 }	
@@ -324,7 +324,13 @@ function updateLibrary($limit = 0)
 		
 	$n = new AlfredNikePlusPHP($username, $password);
 	
-	// FIX THIS : error handling
+	if($n->userId == "") {
+		// cannot retrieve userId
+		unlink($w->data() . "/update_library_in_progress");
+		displayNotification("ERROR: Login to Nike failed. Check your credentials");
+		return;
+	}
+	
 
 	$setSettings = "update settings set username='" . $n->userId . "'";
 	$dbfile = $w->data() . "/settings.db";
@@ -939,7 +945,7 @@ function updateLibrary($limit = 0)
 		exec($sql);
 		
 		
-		echo "$sql\n";				
+		//echo "$sql\n";				
 
 		
 		$elapsed_time = time() - $words[3];

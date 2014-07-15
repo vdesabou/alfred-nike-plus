@@ -151,8 +151,9 @@ if (file_exists($w->data() . '/library.db')) {
 else {
 	$w->result(uniqid(), '', 'Workflow is not configured', '', './images/warning.png', 'no', null, '');
 	
+	$username = exec("Authenticate.app/Contents/MacOS/Authenticate -get username");
 	if($username == "") {
-		$w->result(uniqid(), serialize(array('credentials' /*other_action*/ ,'' /* url */)), "Set you Nike Plus credentials", "Your password will be stored in keychain only", '', 'yes', null, '');
+		$w->result(uniqid(), serialize(array('credentials' /*other_action*/ ,'' /* url */)), "Set you Nike Plus credentials", "Your password will be stored safely in your keychain", '', 'yes', null, '');
 		echo $w->toxml();		
 	}
 
@@ -174,6 +175,9 @@ if($check_results != null && is_array($check_results))
 	return;
 }
 */
+
+// set the default timezone to use.
+date_default_timezone_set('UTC');
 
 // thanks to http://www.alfredforum.com/topic/1788-prevent-flash-of-no-result
 mb_internal_encoding('UTF-8');
@@ -237,6 +241,9 @@ if (mb_strlen($query) < 3 ||
 		
 		$w->result(uniqid(), '', 'Total Distance: ' . $totalDistance . " " . $unit . " ● Runs: " . $lifetime[11], " Average Pace: " . calculatePace($lifetime[40],$lifetime[32],$use_miles) . " min/" . $unit . " ● Average Distance: " . round($totalDistance/$lifetime[11],1) . $unit . " ● Average Fuel: " . round($lifetime[38]/$lifetime[11],0), './images/' . $nikelevel . '.png', 'no', null, '');
 		
+		
+		$w->result(uniqid(), '', 'Browse your activities this month', 'Browse this month', '', 'no', null, 'Year▹' . date("Y") . '▹' . date("m") . '▹' );
+		
 		$w->result(uniqid(), '', 'Browse your activities by year', 'Browse by year', '', 'no', null, 'Year▹');
 		
 
@@ -250,7 +257,7 @@ if (mb_strlen($query) < 3 ||
 
 		$w->result(uniqid(), serialize(array('update_library' /*other_action*/ ,'' /* url */)), 'Update Library', "When done you'll receive a notification. you can check progress by invoking the workflow again", './images/update.png', 'yes', null, '');
 
-		$w->result(uniqid(), serialize(array('credentials' /*other_action*/ ,'' /* url */)), 'Change your Nike Plus credentials', "", './images/credentials.png', 'yes', null, '');
+		$w->result(uniqid(), serialize(array('credentials' /*other_action*/ ,'' /* url */)), 'Change your Nike Plus credentials', "Your password will be stored safely in your keychain", './images/credentials.png', 'yes', null, '');
 	}
 } else {
 	////////////
@@ -336,7 +343,7 @@ if (mb_strlen($query) < 3 ||
 					$total_calories+=$activity[28];
 				}
 				$distance = $use_miles ? round($total_distance* 0.6213711922,2) : round($total_distance,2);
-				$w->result(uniqid(), '', $activityByYear[0] . " ( Runs: " . $total_activities  . " ● Distance: " . $distance . " " . $unit . " ● Pace: " . calculatePace($total_duration,$total_distance,$use_miles) . " min/" . $unit . " )", "Fuel: " . $total_fuel . " ● Calories: " . $total_calories, $activity[1], 'no', null, "Year▹" . $activityByYear[0] . "▹");
+				$w->result(uniqid(), '', $activityByYear[0] . " ( Runs: " . $total_activities  . " ● Distance: " . $distance . " " . $unit . " ● Average Pace: " . calculatePace($total_duration,$total_distance,$use_miles) . " min/" . $unit . " )", "Fuel: " . $total_fuel . " ● Calories: " . $total_calories, $activity[1], 'no', null, "Year▹" . $activityByYear[0] . "▹");
 				
 			}
 	
@@ -421,7 +428,7 @@ if (mb_strlen($query) < 3 ||
 				}			
 	
 				$distance = $use_miles ? round($total_distance* 0.6213711922,2) : round($total_distance,2);
-				$w->result(uniqid(), '', getMonthName(intval($activityByMonth[0])) . " ( Runs: " . $total_activities  . " ● Distance: " . $distance . " " . $unit . " ● Pace: " . calculatePace($total_duration,$total_distance,$use_miles) . " min/" . $unit . " )", "Fuel: " . $total_fuel . " ● Calories: " . $total_calories, $activity[1], 'no', null, "Year▹" . $year . "▹" . $activityByMonth[0] . "▹");
+				$w->result(uniqid(), '', getMonthName(intval($activityByMonth[0])) . " ( Runs: " . $total_activities  . " ● Distance: " . $distance . " " . $unit . " ● Average Pace: " . calculatePace($total_duration,$total_distance,$use_miles) . " min/" . $unit . " )", "Fuel: " . $total_fuel . " ● Calories: " . $total_calories, $activity[1], 'no', null, "Year▹" . $year . "▹" . $activityByMonth[0] . "▹");
 	
 			}
 	
@@ -468,9 +475,6 @@ if (mb_strlen($query) < 3 ||
 				handleDbIssuePdo($theme,$db);
 				return;
 			}
-
-			// set the default timezone to use. Available since PHP 5.1
-			date_default_timezone_set('UTC');
 				
 			// display all activity
 			$noresult=true;
@@ -522,7 +526,7 @@ if (mb_strlen($query) < 3 ||
 				
 				$title = $weather . $emotion . ' ';
 				$title = $title . date("l jS", strtotime($activity[5]));
-				$tilte = $title . " ( Distance: " . $distance . " " . $unit . " ● Pace: " . calculatePace($activity[29],$activity[24],$use_miles) . " min/" . $unit . " )";
+				$tilte = $title . " ( Distance: " . $distance . " " . $unit . " ● Average Pace: " . calculatePace($activity[29],$activity[24],$use_miles) . " min/" . $unit . " )";
 
 	
 				$w->result(uniqid(), serialize(array('' /*other_action*/ ,'https://secure-nikeplus.nike.com/plus/activity/running/' . $username . '/detail/' . $activity[0] /* url */)),$tilte,$subtitle, './images/' . $activity[17] . '.png', 'yes', null, '');
