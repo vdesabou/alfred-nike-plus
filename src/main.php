@@ -432,7 +432,10 @@ if (mb_strlen($query) < 3 ||
 				handleDbIssuePdo($theme,$db);
 				return;
 			}
-	
+
+			// set the default timezone to use. Available since PHP 5.1
+			date_default_timezone_set('UTC');
+				
 			// display all activity
 			$noresult=true;
 			while ($activity = $stmt->fetch()) {
@@ -473,14 +476,20 @@ if (mb_strlen($query) < 3 ||
 				$subtitle = "Fuel: " . $activity[26] . " ● Calories: " . $activity[28];
 				
 				if($address[1] != "") {
-					$subtitle = $subtitle . " ● Address: " . ltrim($address[1], ' 0123456789');
+					$subtitle = $subtitle . " ● City: " . ltrim($address[1], ' 0123456789');
 				}
 
-				if($activity[16] != "") {
+				
+				if($activity[16] != "" && $activity[16] != "note") {
 					$subtitle = $subtitle . " ● Note: " . $activity[16];
 				}				 
 				
-				$w->result(uniqid(), serialize(array('' /*other_action*/ ,'https://secure-nikeplus.nike.com/plus/activity/running/' . $username . '/detail/' . $activity[0] /* url */)), $weather . $emotion . ucfirst($activity[12]) . " ( Distance: " . $distance . " " . $unit . " ● Pace: " . calculatePace($activity[29],$activity[24],$use_miles) . " min/" . $unit . " )", $subtitle, './images/' . $activity[17] . '.png', 'yes', null, '');
+				$title = $weather . $emotion . ' ';
+				$title = $title . date("l jS", strtotime($activity[5]));
+				$tilte = $title . " ( Distance: " . $distance . " " . $unit . " ● Pace: " . calculatePace($activity[29],$activity[24],$use_miles) . " min/" . $unit . " )";
+
+	
+				$w->result(uniqid(), serialize(array('' /*other_action*/ ,'https://secure-nikeplus.nike.com/plus/activity/running/' . $username . '/detail/' . $activity[0] /* url */)),$tilte,$subtitle, './images/' . $activity[17] . '.png', 'yes', null, '');
 			}
 	
 			if($noresult) {
