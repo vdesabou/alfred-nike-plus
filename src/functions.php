@@ -546,68 +546,9 @@ function updateLibrary($limit = 0)
 		$sql = 'sqlite3 "' . $w->data() . '/library.db" ' . ' "drop table lifetime"';
 		exec($sql);
 		
-		$sql = 'sqlite3 "' . $w->data() . '/library.db" ' . ' "create table lifetime (averageDistance float, averagePace float, avgSumForWeek float, goalsHit int, community text, mostFuel int, totalFuel int, totalDistance float, averageFuel float, avgSumForMonth float, averageIntensityPerSession float, treadmill float, beach float, road float,trail float,fuelHeartRate float,distanceHeartRate float,averagePace2 float,durationCardio int, earlyMorningCount int, fastestMarathon int, workoutCardio int, run int, stepWeekAverage float,heartRateAverage float, earlyAfternoonCount int, lateAfternoonCount int, workoutPedo int, lastUpdated int, fastest5K int, runPerWeekAverage float, userActivityLifetimeId text, fastest10K int, runFarthest float,durationHeartRate float, distanceCardio int, fastestHalfMarathon int, earlyEveningCount int, stepDateLongest int, caloriePedo int, runFarthestCardio int, maxRunsPerWeek int, durationPedo int, distance float, calorieHeartRate float, earlyNightCount int, stepCountAverage float, paceHeartRate float, daytimeCount int, lateMorningCount int, duration int, fastest1K int, heartRateRun int, brightAndEarlyCount int, workoutHeartRate float, smallHoursCount int, fastest1M int, longestRunDuration int, mostCaloriesBurnedSingleRun int, morningCount int, calorie int, stepTotal int, stepCountLongest int, calorieCardio int, caloriePedoTotal int, eveningCount int, night float, afternoon float, smallHours float, morning float)"';
+		$sql = 'sqlite3 "' . $w->data() . '/library.db" ' . ' "create table lifetime (treadmill float, beach float, road float,trail float,fuelHeartRate float,distanceHeartRate float,averagePace2 float,durationCardio int, earlyMorningCount int, fastestMarathon int, workoutCardio int, run int, stepWeekAverage float,heartRateAverage float, earlyAfternoonCount int, lateAfternoonCount int, workoutPedo int, lastUpdated int, fastest5K int, runPerWeekAverage float, userActivityLifetimeId text, fastest10K int, runFarthest float,durationHeartRate float, distanceCardio int, fastestHalfMarathon int, earlyEveningCount int, stepDateLongest int, caloriePedo int, runFarthestCardio int, maxRunsPerWeek int, durationPedo int, distance float, calorieHeartRate float, earlyNightCount int, stepCountAverage float, paceHeartRate float, daytimeCount int, totalFuel int, lateMorningCount int, duration int, fastest1K int, heartRateRun int, brightAndEarlyCount int, workoutHeartRate float, smallHoursCount int, fastest1M int, longestRunDuration int, mostCaloriesBurnedSingleRun int, morningCount int, calorie int, stepTotal int, stepCountLongest int, calorieCardio int, caloriePedoTotal int, eveningCount int, night float, afternoon float, smallHours float, morning float)"';
 		exec($sql);
 
-		$averageDistance = 0.0;
-		$averagePace = 0.0;
-		$avgSumForWeek = 0.0;
-		$goalsHit = 0;
-		$community = "";
-		$mostFuel = 0;
-		$totalFuel = 0;
-		$totalDistance = 0.0;
-		$averageFuel = 0.0;
-		$avgSumForMonth = 0.0;
-		$averageIntensityPerSession = 0.0;
-		
-		if (isset($json['homepageStats'])) {
-			
-			if (isset($json['homepageStats']['averageDistance'])) {
-				$averageDistance = $json['homepageStats']['averageDistance'];
-			}
-			
-			if (isset($json['homepageStats']['averagePace'])) {
-				$averagePace = $json['homepageStats']['averagePace'];
-			}
-			
-			if (isset($json['homepageStats']['avgSumForWeek'])) {
-				$avgSumForWeek = $json['homepageStats']['avgSumForWeek'];
-			}
-			
-			if (isset($json['homepageStats']['goalsHit'])) {
-				$goalsHit = $json['homepageStats']['goalsHit'];
-			}
-			
-			if (isset($json['homepageStats']['community'])) {
-				$community = $json['homepageStats']['community'];
-			}
-			
-			if (isset($json['homepageStats']['mostFuel'])) {
-				$mostFuel = $json['homepageStats']['mostFuel'];
-			}
-			
-			if (isset($json['homepageStats']['totalFuel'])) {
-				$totalFuel = $json['homepageStats']['totalFuel'];
-			}
-			
-			if (isset($json['homepageStats']['totalDistance'])) {
-				$totalDistance = $json['homepageStats']['totalDistance'];
-			}
-			
-			if (isset($json['homepageStats']['averageFuel'])) {
-				$averageFuel = $json['homepageStats']['averageFuel'];
-			}
-			
-			if (isset($json['homepageStats']['avgSumForMonth'])) {
-				$avgSumForMonth = $json['homepageStats']['avgSumForMonth'];
-			}
-			
-			if (isset($json['homepageStats']['averageIntensityPerSession'])) {
-				$averageIntensityPerSession = $json['homepageStats']['averageIntensityPerSession'];
-			}
-						
-		}
 		
 		$treadmill = 0.0;
 		$beach = 0.0;
@@ -933,18 +874,7 @@ function updateLibrary($limit = 0)
 		
 		
 		$sql = 'sqlite3 "' . $w->data() . '/library.db" ' . '"insert into lifetime values (' 
-		. $averageDistance
-		. ',' . $averagePace
-		. ',' . $avgSumForWeek
-		. ',' . $goalsHit
-		. ',\"' . $community
-		. '\",' . $mostFuel
-		. ',' . $totalFuel
-		. ',' . $totalDistance
-		. ',' . $averageFuel
-		. ',' . $avgSumForMonth
-		. ',' . $averageIntensityPerSession
-		. ',' . $treadmill
+		. $treadmill
 		. ',' . $beach
 		. ',' . $road
 		. ',' . $trail
@@ -982,6 +912,7 @@ function updateLibrary($limit = 0)
 		. ',' . $stepCountAverage
 		. ',' . $paceHeartRate
 		. ',' . $daytimeCount
+		. ',' . $totalFuel
 		. ',' . $lateMorningCount
 		. ',' . $duration
 		. ',' . $fastest1K
@@ -1008,7 +939,7 @@ function updateLibrary($limit = 0)
 		exec($sql);
 		
 		
-//		echo "$sql\n";				
+		echo "$sql\n";				
 
 		
 		$elapsed_time = time() - $words[3];

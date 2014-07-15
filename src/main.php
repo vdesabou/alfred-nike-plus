@@ -27,7 +27,7 @@ if (file_exists($w->data() . '/update_library_in_progress')) {
 	if (startsWith($words[0],'Init'))
 	{
 		if($elapsed_time < 300) {
-			$w->result(uniqid(), $w->data() . '/update_library_in_progress', 'Initialization phase since ' . beautifyTime($elapsed_time) . ' : ' . floatToSquares(0), 'waiting for Nike Plus web site to return required data', './images/update_in_progress.png', 'no', null, '');
+			$w->result(uniqid(), $w->data() . '/update_library_in_progress', 'Initialization phase since ' . beautifyTime($elapsed_time) . ' : ' . floatToSquares(0), 'waiting for Nike Plus web site to return required data', './images/update.png', 'no', null, '');
 		}
 		else {
 			$w->result(uniqid(), '', 'There is a problem, the initialization phase last more than 5 minutes', 'Follow the steps below:', './images/warning.png', 'no', null, '');
@@ -37,16 +37,7 @@ if (file_exists($w->data() . '/update_library_in_progress')) {
 		}
 	}
 	else {
-		if ($words[0] == 'Playlist List') {
-			$type = 'playlists';
-		} else if ($words[0] == 'Related Artists') {
-				$type = 'related artists';
-			}
-		else {
-			$type = 'tracks';
-		}
-
-		$w->result(uniqid(), $w->data() . '/update_library_in_progress', $words[0] . ' update in progress since ' . beautifyTime($elapsed_time) . ' : '  . floatToSquares(intval($words[1]) / intval($words[2])), $words[1] . '/' . $words[2] . ' ' . $type . ' processed so far (if no progress, use spot_mini_kill_update command to stop it)', './images/update_in_progress.png', 'no', null, '');
+		$w->result(uniqid(), $w->data() . '/update_library_in_progress', $words[0] . ' update in progress since ' . beautifyTime($elapsed_time) . ' : '  . floatToSquares(intval($words[1]) / intval($words[2])), $words[1] . '/' . $words[2] . ' activities processed so far (if no progress, use spot_mini_kill_update command to stop it)', './images/update.png', 'no', null, '');
 	}
 
 	echo $w->toxml();
@@ -166,7 +157,7 @@ else {
 	}
 
 	if (!file_exists($w->data() . '/library.db')) {
-		$w->result(uniqid(), serialize(array('update_library' /*other_action*/ ,'' /* url */)), 'Install library', "when done you'll receive a notification. you can check progress by invoking the workflow again", '', 'yes', null, '');
+		$w->result(uniqid(), serialize(array('update_library' /*other_action*/ ,'' /* url */)), 'Install library', "when done you'll receive a notification. you can check progress by invoking the workflow again", './images/update.png', 'yes', null, '');
 		echo $w->toxml();
 	}
 	return;
@@ -191,8 +182,62 @@ if (mb_strlen($query) < 3 ||
 ) {
 	if (substr_count($query, '▹') == 0) {
 
+		$getLifetime = 'select * from lifetime';
+		try {
+			$stmt = $db->prepare($getLifetime);
 
-		$w->result(uniqid(), '', 'Years', 'Browse by year', '', 'no', null, 'Year▹');
+			$stmt->execute();
+			$lifetime = $stmt->fetch();
+
+		} catch (PDOException $e) {
+			handleDbIssuePdo($theme,$db);
+			return;
+		}
+
+		$averageDistance = $lifetime[0];
+		
+		
+		$totalDistance = $use_miles ? round($lifetime[32]* 0.6213711922,0) : round($lifetime[32],0);
+		
+		if(!$use_miles) {
+			if($lifetime[32] < 50 ) {
+				$nikelevel='yellow';
+			}else if($lifetime[32] < 250 ) {
+				$nikelevel='orange';
+			}else if($lifetime[32] < 1000 ) {
+				$nikelevel='green';
+			}else if($lifetime[32] < 2500 ) {
+				$nikelevel='blue';
+			}else if($lifetime[32] < 5000 ) {
+				$nikelevel='purple';
+			}else if($lifetime[32] < 15000 ) {
+				$nikelevel='black';
+			}else {
+				$nikelevel='volte';
+			}
+		}
+		else {
+			if($lifetime[32] < 50 * 0.6213711922 ) {
+				$nikelevel='yellow';
+			}else if($lifetime[32] < 250* 0.6213711922 ) {
+				$nikelevel='orange';
+			}else if($lifetime[32] < 1000* 0.6213711922 ) {
+				$nikelevel='green';
+			}else if($lifetime[32] < 2500* 0.6213711922 ) {
+				$nikelevel='blue';
+			}else if($lifetime[32] < 5000* 0.6213711922 ) {
+				$nikelevel='purple';
+			}else if($lifetime[32] < 15000* 0.6213711922 ) {
+				$nikelevel='black';
+			}else {
+				$nikelevel='volte';
+			}			
+		}
+
+		
+		$w->result(uniqid(), '', 'Total Distance: ' . $totalDistance . " " . $unit . " ● Runs: " . $lifetime[11], " Average Pace: " . calculatePace($lifetime[40],$lifetime[32],$use_miles) . " min/" . $unit . " ● Average Distance: " . round($totalDistance/$lifetime[11],1) . $unit . " ● Average Fuel: " . round($lifetime[38]/$lifetime[11],0), './images/' . $nikelevel . '.png', 'no', null, '');
+		
+		$w->result(uniqid(), '', 'Browse your activities by year', 'Browse by year', '', 'no', null, 'Year▹');
 		
 
 		$w->result(uniqid(), '', 'Settings', 'Search scope=<all>, Max results=<' . $max_results . '>, Spotifious is <' . $spotifious_state . '>, Alfred Playlist is <' . $alfred_playlist_state . '>', './images/credentials.png', 'no', null, 'Settings▹');		
@@ -203,7 +248,7 @@ if (mb_strlen($query) < 3 ||
 	//
 	elseif (substr_count($query, '▹') == 1) {
 
-		$w->result(uniqid(), serialize(array('update_library' /*other_action*/ ,'' /* url */)), 'Update Library', "When done you'll receive a notification. you can check progress by invoking the workflow again", './images/credentials.png', 'yes', null, '');
+		$w->result(uniqid(), serialize(array('update_library' /*other_action*/ ,'' /* url */)), 'Update Library', "When done you'll receive a notification. you can check progress by invoking the workflow again", './images/update.png', 'yes', null, '');
 
 		$w->result(uniqid(), serialize(array('credentials' /*other_action*/ ,'' /* url */)), 'Change your Nike Plus credentials', "", './images/credentials.png', 'yes', null, '');
 	}
