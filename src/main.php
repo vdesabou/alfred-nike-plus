@@ -27,7 +27,7 @@ if (file_exists($w->data() . '/update_library_in_progress')) {
 	if (startsWith($words[0],'Init'))
 	{
 		if($elapsed_time < 300) {
-			$w->result(uniqid(), $w->data() . '/update_library_in_progress', 'Initialization phase since ' . beautifyTime($elapsed_time) . ' : ' . floatToSquares(0), 'waiting for Spotify Mini Player app to return required data', './images/update_in_progress.png', 'no', null, '');
+			$w->result(uniqid(), $w->data() . '/update_library_in_progress', 'Initialization phase since ' . beautifyTime($elapsed_time) . ' : ' . floatToSquares(0), 'waiting for Nike Plus web site to return required data', './images/update_in_progress.png', 'no', null, '');
 		}
 		else {
 			$w->result(uniqid(), '', 'There is a problem, the initialization phase last more than 5 minutes', 'Follow the steps below:', './images/warning.png', 'no', null, '');
@@ -65,7 +65,7 @@ if (file_exists($w->data() . '/update_library_in_progress')) {
 //
 // Read settings from DB
 //
-$getSettings = 'select username,use_miles,max_results,theme,last_check_update_time from settings';
+$getSettings = 'select username,use_miles,last_check_update_time from settings';
 $dbfile = $w->data() . '/settings.db';
 
 try {
@@ -170,12 +170,12 @@ else {
 	$w->result(uniqid(), '', 'Workflow is not configured', '', './images/warning.png', 'no', null, '');
 	
 	if($username == "") {
-		$w->result(uniqid(), serialize(array('credentials' /*other_action*/ ,'' /* url */)), "Set you Nike Plus credentials", "Your password will be stored in keychain only", './images/' . $theme . '/' . 'app_miniplayer.png', 'yes', null, '');
+		$w->result(uniqid(), serialize(array('credentials' /*other_action*/ ,'' /* url */)), "Set you Nike Plus credentials", "Your password will be stored in keychain only", '', 'yes', null, '');
 		echo $w->toxml();		
 	}
 
 	if (!file_exists($w->data() . '/library.db')) {
-		$w->result(uniqid(), serialize(array('update_library' /*other_action*/ ,'' /* url */)), 'Install library', "when done you'll receive a notification. you can check progress by invoking the workflow again", './images/' . $theme . '/' . 'update.png', 'yes', null, '');
+		$w->result(uniqid(), serialize(array('update_library' /*other_action*/ ,'' /* url */)), 'Install library', "when done you'll receive a notification. you can check progress by invoking the workflow again", '', 'yes', null, '');
 		echo $w->toxml();
 	}
 	return;
@@ -470,7 +470,7 @@ if (mb_strlen($query) < 3 ||
 				
 				$address = explode(',', $activity[31]);
 				
-				$w->result(uniqid(), 'https://secure-nikeplus.nike.com/plus/activity/running/' . 'vdesabou' . '/detail/' . $activity[0], $weather . $emotion . ucfirst($activity[12]) . " ( Distance: " . $distance . " " . $unit . " ● Pace: " . calculatePace($activity[29],$activity[24],$use_miles) . " min/" . $unit . " )", "Fuel: " . $activity[26] . " ● Calories: " . $activity[28] . " ● Address: " . $address[1], './images/' . $activity[17] . '.png', 'yes', null, '');
+				$w->result(uniqid(), serialize(array('' /*other_action*/ ,'https://secure-nikeplus.nike.com/plus/activity/running/' . $username . '/detail/' . $activity[0] /* url */)), $weather . $emotion . ucfirst($activity[12]) . " ( Distance: " . $distance . " " . $unit . " ● Pace: " . calculatePace($activity[29],$activity[24],$use_miles) . " min/" . $unit . " )", "Fuel: " . $activity[26] . " ● Calories: " . $activity[28] . " ● Address: " . $address[1], './images/' . $activity[17] . '.png', 'yes', null, '');
 			}
 	
 			if($noresult) {

@@ -35,19 +35,20 @@ if ($other_action == "update_library") {
 	touch($w->data() . "/update_library_in_progress");
 	$w->write('InitLibrary▹' . 0 . '▹' . 0 . '▹' . time(), 'update_library_in_progress');
 
+	$setSettings = "update settings set username='" . $n->userId . "'";
+	$dbfile = $w->data() . "/settings.db";
+	exec("sqlite3 \"$dbfile\" \"$setSettings\"");
+	displayNotification("Now using login " . $n->userId);
+	
 	updateLibrary(json_encode($n->activities()));
 }else if ($other_action == "credentials") {
   
-	$command_output = exec("Authenticate.app/Contents/MacOS/Authenticate 2>&1");
-	
-	$username = exec("Authenticate.app/Contents/MacOS/Authenticate -get username");
-		
-	$setSettings = "update settings set username='" . $username . "'";
-	$dbfile = $w->data() . "/settings.db";
-	exec("sqlite3 \"$dbfile\" \"$setSettings\"");
-	displayNotificationWithArtwork("Now using login " . $username,'./images/' . $theme . '/' . 'check.png');
+	$command_output = exec("Authenticate.app/Contents/MacOS/Authenticate 2>&1");		
 }
-			
+
+if($url != "") {
+	exec("open \"" . $url . "\""); 
+}			
 			
 /*
 
