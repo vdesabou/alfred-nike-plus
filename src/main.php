@@ -361,7 +361,7 @@ if (mb_strlen($query) < 3 ||
 					$total_calories+=$activity[28];
 				}
 				$distance = $use_miles ? round($total_distance* 0.6213711922,2) : round($total_distance,2);
-				$w->result(uniqid(), '', $activityByYear[0] . " ( Runs: " . $total_activities  . " ● Distance: " . $distance . " " . $unit . " ● Average Pace: " . calculatePace($total_duration,$total_distance,$use_miles) . " min/" . $unit . " )", "Fuel: " . $total_fuel . " ● Calories: " . $total_calories, $activity[1], 'no', null, "Year▹" . $activityByYear[0] . "▹");
+				$w->result(uniqid(), '', "Runs: " . $total_activities  . " ● Distance: " . $distance . " " . $unit . " ● Average Pace: " . calculatePace($total_duration,$total_distance,$use_miles) . " min/" . $unit . "", "Fuel: " . $total_fuel . " ● Calories: " . $total_calories, './images/' . $activityByYear[0] . '.png', 'no', null, "Year▹" . $activityByYear[0] . "▹");
 				
 			}
 	
