@@ -311,9 +311,26 @@ function displayNotificationForUnstarredTrack($track_name,$track_uri)
  * @param mixed $jsonData
  * @return void
  */
-function updateLibrary($jsonData)
+function updateLibrary($limit = 0)
 {
 	$w = new Workflows('com.vdesabou.nike.plus');
+	
+	touch($w->data() . "/update_library_in_progress");
+	$w->write('InitLibrary▹' . 0 . '▹' . 0 . '▹' . time(), 'update_library_in_progress');
+	
+	$username = exec("Authenticate.app/Contents/MacOS/Authenticate -get username");
+	
+	$password = exec("Authenticate.app/Contents/MacOS/Authenticate -get password");
+		
+	$n = new AlfredNikePlusPHP($username, $password);
+	
+	// FIX THIS : error handling
+
+	$setSettings = "update settings set username='" . $n->userId . "'";
+	$dbfile = $w->data() . "/settings.db";
+	exec("sqlite3 \"$dbfile\" \"$setSettings\"");
+	
+	
 	$in_progress_data = $w->read('update_library_in_progress');
 
 	//
@@ -343,44 +360,25 @@ function updateLibrary($jsonData)
 
 	ini_set('memory_limit', '512M');
 
-
-	//try to decode it
+	// get all activities
+	
+	$jsonData = json_encode($n->activities($limit,false));
 	$json = json_decode($jsonData, true);
 	if (json_last_error() === JSON_ERROR_NONE) {
-		if (file_exists($w->data() . "/library.db")) {
-			unlink($w->data() . "/library.db");
+	
+		if($limit == 0) {
+			if (file_exists($w->data() . "/library.db")) {
+				unlink($w->data() . "/library.db");
+			}
+			touch($w->data() . "/library.db");
+	
+			$sql = 'sqlite3 "' . $w->data() . '/library.db" ' . ' "create table activities (activityId text PRIMARY KEY NOT NULL, heartrate boolean, gps boolean, activityType text, activeTime int, startTimeUtc text, latitude text, longitude text, timeZone text, dstOffset text, deviceType text, timeZoneId text, name text, status text,weather text,emotion text,note text,terrain text,shoes_activityCount int, shoes_percentage float, shoes_name text, shoes_distance float, shoes_retired boolean, averageHeartRate int,distance float, maximumHeartRate int, fuel int, steps int, calories int, duration int, minimumHeartRate int, address text)"';
+			exec($sql);
+	
+	
+			$sql = 'sqlite3 "' . $w->data() . '/library.db" ' . ' "CREATE INDEX IndexStartTimeUtc ON activities (startTimeUtc)"';
+			exec($sql);
 		}
-		touch($w->data() . "/library.db");
-
-		$sql = 'sqlite3 "' . $w->data() . '/library.db" ' . ' "create table activities (activityId text PRIMARY KEY NOT NULL, heartrate boolean, gps boolean, activityType text, activeTime int, startTimeUtc text, latitude text, longitude text, timeZone text, dstOffset text, deviceType text, timeZoneId text, name text, status text,weather text,emotion text,note text,terrain text,shoes_activityCount int, shoes_percentage float, shoes_name text, shoes_distance float, shoes_retired boolean, averageHeartRate int,distance float, maximumHeartRate int, fuel int, steps int, calories int, duration int, minimumHeartRate int, address text)"';
-		exec($sql);
-
-/*
-		$sql = 'sqlite3 "' . $w->data() . '/library.db" ' . ' "CREATE INDEX IndexPlaylistUri ON tracks (playlist_uri)"';
-		exec($sql);
-
-		$sql = 'sqlite3 "' . $w->data() . '/library.db" ' . ' "CREATE INDEX IndexArtistName ON tracks (artist_name)"';
-		exec($sql);
-
-		$sql = 'sqlite3 "' . $w->data() . '/library.db" ' . ' "CREATE INDEX IndexAlbumName ON tracks (album_name)"';
-		exec($sql);
-
-
-		$sql = 'sqlite3 "' . $w->data() . '/library.db" ' . ' "create table counters (all_tracks int, starred_tracks int, all_artists int, starred_artists int, all_albums int, starred_albums int, playlists int)"';
-		exec($sql);
-
-		$sql = 'sqlite3 "' . $w->data() . '/library.db" ' . ' "create table user (uri text, username text, name text, image text)"';
-		exec($sql);
-
-		$sql = 'sqlite3 "' . $w->data() . '/library.db" ' . ' "create table playlists (uri text PRIMARY KEY NOT NULL, name text, nb_tracks int, author text, username text, playlist_artwork_path text, ownedbyuser boolean)"';
-		exec($sql);
-
-		$sql = 'sqlite3 "' . $w->data() . '/library.db" ' . ' "create table artists (artist_name text, artist_uri text, artist_artwork_path text, artist_biography text, artist_popularity int, artist_years_from text, artist_years_to text, related_artist_name text, related_artist_uri text, related_artist_artwork_path text, PRIMARY KEY (artist_name, related_artist_name))"';
-		exec($sql);
-
-		$sql = 'sqlite3 "' . $w->data() . '/library.db" ' . ' "CREATE INDEX indexArtistName ON artists (artist_name)"';
-		exec($sql);
-*/
 
 		$nb_activities=0;
 		$nb_activitiestotal=0;
@@ -519,7 +517,7 @@ function updateLibrary($jsonData)
 								
 			}
 			
-			$sql = 'sqlite3 "' . $w->data() . '/library.db" ' . '"insert into activities values (' . '\"' . $activity['activityId'] . '\",' . $heartrate. ',' . $gps . ',\"' . $activity['activityType'] . '\",' . $activity['activeTime'] . ',\"' . $activity['startTimeUtc'] . '\",\"' . $latitude . '\",\"' . $longitude. '\",\"' . $activity['timeZone'] . '\",\"' . $dstOffset . '\"' . ',\"' . $activity['deviceType'] . '\"' . ',\"' . $timeZoneId . '\"' . ',\"' . $activity['name'] . '\"' . ',\"' . $activity['status'] . '\"' . ',\"' . $weather . '\"' . ',\"' . $emotion . '\"' . ',\"' . $note . '\"' . ',\"' . $terrain . '\"' . ',' . $shoes_activityCount . '' . ',' . $shoes_percentage . '' . ',\"' . $shoes_name . '\"' . ',' . $shoes_distance . '' . ',' . $shoes_retired . '' . ',' . $averageHeartRate . '' . ',' . $distance . '' . ',' . $maximumHeartRate . '' . ',' . $fuel . '' . ',' . $steps . '' . ',' . $calories . '' . ',' . $duration . '' . ',' . $minimumHeartRate . ',' . '\"'. $address . '\"' .')"';
+			$sql = 'sqlite3 "' . $w->data() . '/library.db" ' . '"insert or ignore into activities values (' . '\"' . $activity['activityId'] . '\",' . $heartrate. ',' . $gps . ',\"' . $activity['activityType'] . '\",' . $activity['activeTime'] . ',\"' . $activity['startTimeUtc'] . '\",\"' . $latitude . '\",\"' . $longitude. '\",\"' . $activity['timeZone'] . '\",\"' . $dstOffset . '\"' . ',\"' . $activity['deviceType'] . '\"' . ',\"' . $timeZoneId . '\"' . ',\"' . $activity['name'] . '\"' . ',\"' . $activity['status'] . '\"' . ',\"' . $weather . '\"' . ',\"' . $emotion . '\"' . ',\"' . $note . '\"' . ',\"' . $terrain . '\"' . ',' . $shoes_activityCount . '' . ',' . $shoes_percentage . '' . ',\"' . $shoes_name . '\"' . ',' . $shoes_distance . '' . ',' . $shoes_retired . '' . ',' . $averageHeartRate . '' . ',' . $distance . '' . ',' . $maximumHeartRate . '' . ',' . $fuel . '' . ',' . $steps . '' . ',' . $calories . '' . ',' . $duration . '' . ',' . $minimumHeartRate . ',' . '\"'. $address . '\"' .')"';
 
 			exec($sql);
 			
@@ -532,9 +530,495 @@ function updateLibrary($jsonData)
 			//echo "$sql\n";				
 
 		}
+	} else {
+		unlink($w->data() . "/update_library_in_progress");
+		//it's not JSON. Log error
+		displayNotification("ERROR: JSON data is not valid!");
+	}
+	
+	// get lifetime
+	
+	$jsonData = json_encode($n->allTime());
+	$json = json_decode($jsonData, true);
+	if (json_last_error() === JSON_ERROR_NONE) {
+	
+
+		$sql = 'sqlite3 "' . $w->data() . '/library.db" ' . ' "drop table lifetime"';
+		exec($sql);
+		
+		$sql = 'sqlite3 "' . $w->data() . '/library.db" ' . ' "create table lifetime (averageDistance float, averagePace float, avgSumForWeek float, goalsHit int, community text, mostFuel int, totalFuel int, totalDistance float, averageFuel float, avgSumForMonth float, averageIntensityPerSession float, treadmill float, beach float, road float,trail float,fuelHeartRate float,distanceHeartRate float,averagePace2 float,durationCardio int, earlyMorningCount int, fastestMarathon int, workoutCardio int, run int, stepWeekAverage float,heartRateAverage float, earlyAfternoonCount int, lateAfternoonCount int, workoutPedo int, lastUpdated int, fastest5K int, runPerWeekAverage float, userActivityLifetimeId text, fastest10K int, runFarthest float,durationHeartRate float, distanceCardio int, fastestHalfMarathon int, earlyEveningCount int, stepDateLongest int, caloriePedo int, runFarthestCardio int, maxRunsPerWeek int, durationPedo int, distance float, calorieHeartRate float, earlyNightCount int, stepCountAverage float, paceHeartRate float, daytimeCount int, lateMorningCount int, duration int, fastest1K int, heartRateRun int, brightAndEarlyCount int, workoutHeartRate float, smallHoursCount int, fastest1M int, longestRunDuration int, mostCaloriesBurnedSingleRun int, morningCount int, calorie int, stepTotal int, stepCountLongest int, calorieCardio int, caloriePedoTotal int, eveningCount int, night float, afternoon float, smallHours float, morning float)"';
+		exec($sql);
+
+		$averageDistance = 0.0;
+		$averagePace = 0.0;
+		$avgSumForWeek = 0.0;
+		$goalsHit = 0;
+		$community = "";
+		$mostFuel = 0;
+		$totalFuel = 0;
+		$totalDistance = 0.0;
+		$averageFuel = 0.0;
+		$avgSumForMonth = 0.0;
+		$averageIntensityPerSession = 0.0;
+		
+		if (isset($json['homepageStats'])) {
+			
+			if (isset($json['homepageStats']['averageDistance'])) {
+				$averageDistance = $json['homepageStats']['averageDistance'];
+			}
+			
+			if (isset($json['homepageStats']['averagePace'])) {
+				$averagePace = $json['homepageStats']['averagePace'];
+			}
+			
+			if (isset($json['homepageStats']['avgSumForWeek'])) {
+				$avgSumForWeek = $json['homepageStats']['avgSumForWeek'];
+			}
+			
+			if (isset($json['homepageStats']['goalsHit'])) {
+				$goalsHit = $json['homepageStats']['goalsHit'];
+			}
+			
+			if (isset($json['homepageStats']['community'])) {
+				$community = $json['homepageStats']['community'];
+			}
+			
+			if (isset($json['homepageStats']['mostFuel'])) {
+				$mostFuel = $json['homepageStats']['mostFuel'];
+			}
+			
+			if (isset($json['homepageStats']['totalFuel'])) {
+				$totalFuel = $json['homepageStats']['totalFuel'];
+			}
+			
+			if (isset($json['homepageStats']['totalDistance'])) {
+				$totalDistance = $json['homepageStats']['totalDistance'];
+			}
+			
+			if (isset($json['homepageStats']['averageFuel'])) {
+				$averageFuel = $json['homepageStats']['averageFuel'];
+			}
+			
+			if (isset($json['homepageStats']['avgSumForMonth'])) {
+				$avgSumForMonth = $json['homepageStats']['avgSumForMonth'];
+			}
+			
+			if (isset($json['homepageStats']['averageIntensityPerSession'])) {
+				$averageIntensityPerSession = $json['homepageStats']['averageIntensityPerSession'];
+			}
+						
+		}
+		
+		$treadmill = 0.0;
+		$beach = 0.0;
+		$road = 0.0;
+		$trail = 0.0;
+		
+		if (isset($json['terrains'])) {
+			
+			if (isset($json['terrains']['treadmill'])) {
+				$treadmill = $json['terrains']['treadmill'];
+			}
+			
+			if (isset($json['terrains']['beach'])) {
+				$beach = $json['terrains']['beach'];
+			}
+			
+			if (isset($json['terrains']['road'])) {
+				$road = $json['terrains']['road'];
+			}
+			
+			if (isset($json['terrains']['trail'])) {
+				$trail = $json['terrains']['trail'];
+			}						
+		}
+
+
+		$fuelHeartRate = 0.0;
+		$distanceHeartRate = 0.0;
+		$averagePace2 = 0.0;
+		$durationCardio = 0;
+		$earlyMorningCount = 0;
+		$fastestMarathon = 0;
+		$workoutCardio = 0;
+		$run = 0;
+		$stepWeekAverage = 0.0;
+		
+		
+		$heartRateAverage = 0.0;
+		$earlyAfternoonCount = 0;
+		$lateAfternoonCount = 0;
+		$workoutPedo = 0;
+		$lastUpdated = 0;
+		$fastest5K = 0;
+		$runPerWeekAverage = 0.0;
+		$userActivityLifetimeId = "";	
+		$fastest10K = 0;
+		$runFarthest = 0.0;
+		$durationHeartRate = 0.0;
+		$distanceCardio = 0;
+		$fastestHalfMarathon = 0;
+		$earlyEveningCount = 0;
+		$stepDateLongest = 0;
+		$caloriePedo = 0;
+		$runFarthestCardio = 0;
+		$maxRunsPerWeek = 0;
+		$durationPedo = 0;
+		$distance = 0.0;
+		$calorieHeartRate = 0.0;
+		$earlyNightCount = 0;
+		$stepCountAverage = 0.0;
+		$paceHeartRate = 0.0;
+		$daytimeCount = 0;
+		$lateMorningCount = 0;
+		$totalFuel = 0;
+		$lateNightCount = 0;
+		$duration = 0;
+		$fastest1K = 0;
+		$heartRateRun = 0;
+		$brightAndEarlyCount = 0;
+		$workoutHeartRate = 0.0;
+		$smallHoursCount = 0;
+		$fastest1M = 0;
+		$longestRunDuration = 0;
+		$mostCaloriesBurnedSingleRun = 0;
+		$morningCount = 0;
+		$calorie = 0;
+		$stepTotal = 0;
+		$stepCountLongest = 0;
+		$calorieCardio = 0;
+		$caloriePedoTotal = 0;
+		$eveningCount = 0;
+		
+			
+		if (isset($json['lifetimeTotals'])) {
+			
+			if (isset($json['lifetimeTotals']['fuelHeartRate'])) {
+				$fuelHeartRate = $json['lifetimeTotals']['fuelHeartRate'];
+			}
+			
+			if (isset($json['lifetimeTotals']['distanceHeartRate'])) {
+				$distanceHeartRate = $json['lifetimeTotals']['distanceHeartRate'];
+			}
+			
+			if (isset($json['lifetimeTotals']['averagePace'])) {
+				$averagePace2 = $json['lifetimeTotals']['averagePace'];
+			}
+			
+			if (isset($json['lifetimeTotals']['durationCardio'])) {
+				$durationCardio = $json['lifetimeTotals']['durationCardio'];
+			}
+			
+			if (isset($json['lifetimeTotals']['earlyMorningCount'])) {
+				$earlyMorningCount = $json['lifetimeTotals']['earlyMorningCount'];
+			}
+			
+			if (isset($json['lifetimeTotals']['fastestMarathon'])) {
+				$fastestMarathon = $json['lifetimeTotals']['fastestMarathon'];
+			}
+			
+			if (isset($json['lifetimeTotals']['workoutCardio'])) {
+				$workoutCardio = $json['lifetimeTotals']['workoutCardio'];
+			}
+			
+			if (isset($json['lifetimeTotals']['run'])) {
+				$run = $json['lifetimeTotals']['run'];
+			}
+			
+			if (isset($json['lifetimeTotals']['stepWeekAverage'])) {
+				$stepWeekAverage = $json['lifetimeTotals']['stepWeekAverage'];
+			}
+			
+			if (isset($json['lifetimeTotals']['heartRateAverage'])) {
+				$heartRateAverage = $json['lifetimeTotals']['heartRateAverage'];
+			}
+			
+			if (isset($json['lifetimeTotals']['earlyAfternoonCount'])) {
+				$earlyAfternoonCount = $json['lifetimeTotals']['earlyAfternoonCount'];
+			}
+			
+			if (isset($json['lifetimeTotals']['lateAfternoonCount'])) {
+				$lateAfternoonCount = $json['lifetimeTotals']['lateAfternoonCount'];
+			}
+			
+			if (isset($json['lifetimeTotals']['workoutPedo'])) {
+				$workoutPedo = $json['lifetimeTotals']['workoutPedo'];
+			}
+			
+			if (isset($json['lifetimeTotals']['lastUpdated'])) {
+				$lastUpdated = $json['lifetimeTotals']['lastUpdated'];
+			}
+			
+			if (isset($json['lifetimeTotals']['fastest5K'])) {
+				$fastest5K = $json['lifetimeTotals']['fastest5K'];
+			}
+			
+			if (isset($json['lifetimeTotals']['runPerWeekAverage'])) {
+				$runPerWeekAverage = $json['lifetimeTotals']['runPerWeekAverage'];
+			}
+			
+			if (isset($json['lifetimeTotals']['userActivityLifetimeId'])) {
+				$userActivityLifetimeId = $json['lifetimeTotals']['userActivityLifetimeId'];
+			}
+			
+			if (isset($json['lifetimeTotals']['fastest10K'])) {
+				$fastest10K = $json['lifetimeTotals']['fastest10K'];
+			}
+			
+			if (isset($json['lifetimeTotals']['runFarthest'])) {
+				$runFarthest = $json['lifetimeTotals']['runFarthest'];
+			}
+			
+			if (isset($json['lifetimeTotals']['durationHeartRate'])) {
+				$durationHeartRate = $json['lifetimeTotals']['durationHeartRate'];
+			}
+			
+			if (isset($json['lifetimeTotals']['distanceCardio'])) {
+				$distanceCardio = $json['lifetimeTotals']['distanceCardio'];
+			}
+			
+			if (isset($json['lifetimeTotals']['fastestHalfMarathon'])) {
+				$fastestHalfMarathon = $json['lifetimeTotals']['fastestHalfMarathon'];
+			}
+			
+			if (isset($json['lifetimeTotals']['earlyEveningCount'])) {
+				$earlyEveningCount = $json['lifetimeTotals']['earlyEveningCount'];
+			}
+			
+			if (isset($json['lifetimeTotals']['stepDateLongest'])) {
+				$stepDateLongest = $json['lifetimeTotals']['stepDateLongest'];
+			}
+			
+			if (isset($json['lifetimeTotals']['caloriePedo'])) {
+				$caloriePedo = $json['lifetimeTotals']['caloriePedo'];
+			}
+			
+			if (isset($json['lifetimeTotals']['runFarthestCardio'])) {
+				$runFarthestCardio = $json['lifetimeTotals']['runFarthestCardio'];
+			}
+			
+			if (isset($json['lifetimeTotals']['maxRunsPerWeek'])) {
+				$maxRunsPerWeek = $json['lifetimeTotals']['maxRunsPerWeek'];
+			}
+			
+			if (isset($json['lifetimeTotals']['durationPedo'])) {
+				$durationPedo = $json['lifetimeTotals']['durationPedo'];
+			}
+			
+			if (isset($json['lifetimeTotals']['distance'])) {
+				$distance = $json['lifetimeTotals']['distance'];
+			}
+			
+			if (isset($json['lifetimeTotals']['calorieHeartRate'])) {
+				$calorieHeartRate = $json['lifetimeTotals']['calorieHeartRate'];
+			}
+			
+			if (isset($json['lifetimeTotals']['earlyNightCount'])) {
+				$earlyNightCount = $json['lifetimeTotals']['earlyNightCount'];
+			}
+			
+			if (isset($json['lifetimeTotals']['stepCountAverage'])) {
+				$stepCountAverage = $json['lifetimeTotals']['stepCountAverage'];
+			}	
+			
+			if (isset($json['lifetimeTotals']['paceHeartRate'])) {
+				$paceHeartRate = $json['lifetimeTotals']['paceHeartRate'];
+			}
+			
+			if (isset($json['lifetimeTotals']['daytimeCount'])) {
+				$daytimeCount = $json['lifetimeTotals']['daytimeCount'];
+			}
+			
+			if (isset($json['lifetimeTotals']['lateMorningCount'])) {
+				$lateMorningCount = $json['lifetimeTotals']['lateMorningCount'];
+			}	
+
+			if (isset($json['lifetimeTotals']['totalFuel'])) {
+				$totalFuel = $json['lifetimeTotals']['totalFuel'];
+			}
+			
+			if (isset($json['lifetimeTotals']['lateNightCount'])) {
+				$lateNightCount = $json['lifetimeTotals']['lateNightCount'];
+			}
+			
+			if (isset($json['lifetimeTotals']['duration'])) {
+				$duration = $json['lifetimeTotals']['duration'];
+			}	
+			
+			if (isset($json['lifetimeTotals']['fastest1K'])) {
+				$fastest1K = $json['lifetimeTotals']['fastest1K'];
+			}
+			
+			if (isset($json['lifetimeTotals']['heartRateRun'])) {
+				$heartRateRun = $json['lifetimeTotals']['heartRateRun'];
+			}
+			
+			if (isset($json['lifetimeTotals']['brightAndEarlyCount'])) {
+				$brightAndEarlyCount = $json['lifetimeTotals']['brightAndEarlyCount'];
+			}	
+			
+			if (isset($json['lifetimeTotals']['workoutHeartRate'])) {
+				$workoutHeartRate = $json['lifetimeTotals']['workoutHeartRate'];
+			}
+			
+			if (isset($json['lifetimeTotals']['smallHoursCount'])) {
+				$smallHoursCount = $json['lifetimeTotals']['smallHoursCount'];
+			}
+			
+			if (isset($json['lifetimeTotals']['fastest1M'])) {
+				$fastest1M = $json['lifetimeTotals']['fastest1M'];
+			}	
+			
+			if (isset($json['lifetimeTotals']['longestRunDuration'])) {
+				$longestRunDuration = $json['lifetimeTotals']['longestRunDuration'];
+			}
+			
+			if (isset($json['lifetimeTotals']['mostCaloriesBurnedSingleRun'])) {
+				$mostCaloriesBurnedSingleRun = $json['lifetimeTotals']['mostCaloriesBurnedSingleRun'];
+			}
+			
+			if (isset($json['lifetimeTotals']['morningCount'])) {
+				$morningCount = $json['lifetimeTotals']['morningCount'];
+			}
+			
+			if (isset($json['lifetimeTotals']['calorie'])) {
+				$calorie = $json['lifetimeTotals']['calorie'];
+			}		
+			
+			if (isset($json['lifetimeTotals']['stepTotal'])) {
+				$stepTotal = $json['lifetimeTotals']['stepTotal'];
+			}	
+			
+			if (isset($json['lifetimeTotals']['stepCountLongest'])) {
+				$stepCountLongest = $json['lifetimeTotals']['stepCountLongest'];
+			}
+			
+			if (isset($json['lifetimeTotals']['calorieCardio'])) {
+				$calorieCardio = $json['lifetimeTotals']['calorieCardio'];
+			}		
+			
+			if (isset($json['lifetimeTotals']['caloriePedoTotal'])) {
+				$caloriePedoTotal = $json['lifetimeTotals']['caloriePedoTotal'];
+			}	
+			
+			if (isset($json['lifetimeTotals']['eveningCount'])) {
+				$eveningCount = $json['lifetimeTotals']['eveningCount'];
+			}
+					
+		}
+		
+		$morning = 0.0;
+		$night = 0.0;
+		$afternoon = 0.0;
+		$smallHours = 0.0;
+		
+		if (isset($json['timeOfDay'])) {
+			
+			if (isset($json['timeOfDay']['morning'])) {
+				$morning = $json['timeOfDay']['morning'];
+			}
+			
+			if (isset($json['timeOfDay']['night'])) {
+				$night = $json['timeOfDay']['night'];
+			}
+			
+			if (isset($json['timeOfDay']['afternoon'])) {
+				$afternoon = $json['timeOfDay']['afternoon'];
+			}
+			
+			if (isset($json['timeOfDay']['smallHours'])) {
+				$smallHours = $json['timeOfDay']['smallHours'];
+			}						
+		}
+		
+		
+		$sql = 'sqlite3 "' . $w->data() . '/library.db" ' . '"insert into lifetime values (' 
+		. $averageDistance
+		. ',' . $averagePace
+		. ',' . $avgSumForWeek
+		. ',' . $goalsHit
+		. ',\"' . $community
+		. '\",' . $mostFuel
+		. ',' . $totalFuel
+		. ',' . $totalDistance
+		. ',' . $averageFuel
+		. ',' . $avgSumForMonth
+		. ',' . $averageIntensityPerSession
+		. ',' . $treadmill
+		. ',' . $beach
+		. ',' . $road
+		. ',' . $trail
+		. ',' . $fuelHeartRate
+		. ',' . $distanceHeartRate
+		. ',' . $averagePace2
+		. ',' . $durationCardio
+		. ',' . $earlyMorningCount
+		. ',' . $fastestMarathon
+		. ',' . $workoutCardio
+		. ',' . $run
+		. ',' . $stepWeekAverage
+		. ',' . $heartRateAverage
+		. ',' . $earlyAfternoonCount
+		. ',' . $lateAfternoonCount
+		. ',' . $workoutPedo
+		. ',' . $lastUpdated
+		. ',' . $fastest5K
+		. ',' . $runPerWeekAverage
+		. ',\"' . $userActivityLifetimeId
+		. '\",' . $fastest10K
+		. ',' . $runFarthest
+		. ',' . $durationHeartRate
+		. ',' . $distanceCardio
+		. ',' . $fastestHalfMarathon
+		. ',' . $earlyEveningCount
+		. ',' . $stepDateLongest
+		. ',' . $caloriePedo
+		. ',' . $runFarthestCardio
+		. ',' . $maxRunsPerWeek
+		. ',' . $durationPedo
+		. ',' . $distance
+		. ',' . $calorieHeartRate
+		. ',' . $earlyNightCount
+		. ',' . $stepCountAverage
+		. ',' . $paceHeartRate
+		. ',' . $daytimeCount
+		. ',' . $lateMorningCount
+		. ',' . $duration
+		. ',' . $fastest1K
+		. ',' . $heartRateRun
+		. ',' . $brightAndEarlyCount
+		. ',' . $workoutHeartRate
+		. ',' . $smallHoursCount
+		. ',' . $fastest1M
+		. ',' . $longestRunDuration
+		. ',' . $mostCaloriesBurnedSingleRun
+		. ',' . $morningCount
+		. ',' . $calorie
+		. ',' . $stepTotal
+		. ',' . $stepCountLongest
+		. ',' . $calorieCardio
+		. ',' . $caloriePedoTotal
+		. ',' . $eveningCount
+		. ',' . $night
+		. ',' . $afternoon
+		. ',' . $smallHours
+		. ',' . $morning
+		.')"';
+
+		exec($sql);
+		
+		
+//		echo "$sql\n";				
+
 		
 		$elapsed_time = time() - $words[3];
-		displayNotification("Library has been created (" . $nb_activities . " activities) - it took " . beautifyTime($elapsed_time));
+		if($limit == 0) {
+			displayNotification("Library has been created (" . $nb_activities . " activities) - it took " . beautifyTime($elapsed_time));
+		}
+		else {
+			displayNotification("Library has been updated (" . $nb_activities . " activities) - it took " . beautifyTime($elapsed_time));
+		}
+		
 
 		unlink($w->data() . "/update_library_in_progress");
 
@@ -543,6 +1027,7 @@ function updateLibrary($jsonData)
 		//it's not JSON. Log error
 		displayNotification("ERROR: JSON data is not valid!");
 	}
+
 }
 
 
