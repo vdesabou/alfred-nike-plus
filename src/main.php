@@ -411,7 +411,7 @@ if (mb_strlen($query) < 3 ||
 					return;
 				}
 	
-				// get all activities for year
+				// get all activities for month
 				$total_duration=0;
 				$total_distance=0;
 				$total_activities=0;
@@ -523,6 +523,17 @@ if (mb_strlen($query) < 3 ||
 				if($activity[16] != "" && $activity[16] != "note") {
 					$subtitle = $subtitle . " ● Note: " . $activity[16];
 				}				 
+				
+				if($activity[20] != "") {
+					$subtitle = $subtitle . " ● Shoes: " . $activity[20];
+/*
+					if($activity[21] != "") {
+						$shoes_distance = $use_miles ? round($activity[21]* 0.6213711922,2) : round($activity[21],2);
+						$subtitle = $subtitle . "(" . $shoes_distance . " " . $unit . ")";
+						
+					}	
+*/				
+				}
 				
 				$title = $weather . $emotion . ' ';
 				$title = $title . date("l jS", strtotime($activity[5]));
