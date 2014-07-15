@@ -1,7 +1,7 @@
 <?php
 
 require_once('./src/workflows.php');
-require_once('./src/nikeplusphp.4.5.1.php');
+require_once('./src/alfrednikeplus.php');
 
 
 /**

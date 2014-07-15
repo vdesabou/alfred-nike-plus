@@ -30,7 +30,7 @@ if ($other_action == "update_library") {
 	
 	$password = exec("Authenticate.app/Contents/MacOS/Authenticate -get password");
 		
-	$n = new NikePlusPHP($username, $password);
+	$n = new AlfredNikePlusPHP($username, $password);
 	
 	touch($w->data() . "/update_library_in_progress");
 	$w->write('InitLibrary▹' . 0 . '▹' . 0 . '▹' . time(), 'update_library_in_progress');
