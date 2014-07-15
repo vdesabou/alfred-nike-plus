@@ -470,7 +470,17 @@ if (mb_strlen($query) < 3 ||
 				
 				$address = explode(',', $activity[31]);
 				
-				$w->result(uniqid(), serialize(array('' /*other_action*/ ,'https://secure-nikeplus.nike.com/plus/activity/running/' . $username . '/detail/' . $activity[0] /* url */)), $weather . $emotion . ucfirst($activity[12]) . " ( Distance: " . $distance . " " . $unit . " ● Pace: " . calculatePace($activity[29],$activity[24],$use_miles) . " min/" . $unit . " )", "Fuel: " . $activity[26] . " ● Calories: " . $activity[28] . " ● Address: " . $address[1], './images/' . $activity[17] . '.png', 'yes', null, '');
+				$subtitle = "Fuel: " . $activity[26] . " ● Calories: " . $activity[28];
+				
+				if($address[1] != "") {
+					$subtitle = $subtitle . " ● Address: " . ltrim($address[1], ' 0123456789');
+				}
+
+				if($activity[16] != "") {
+					$subtitle = $subtitle . " ● Note: " . $activity[16];
+				}				 
+				
+				$w->result(uniqid(), serialize(array('' /*other_action*/ ,'https://secure-nikeplus.nike.com/plus/activity/running/' . $username . '/detail/' . $activity[0] /* url */)), $weather . $emotion . ucfirst($activity[12]) . " ( Distance: " . $distance . " " . $unit . " ● Pace: " . calculatePace($activity[29],$activity[24],$use_miles) . " min/" . $unit . " )", $subtitle, './images/' . $activity[17] . '.png', 'yes', null, '');
 			}
 	
 			if($noresult) {
