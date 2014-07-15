@@ -27,6 +27,15 @@ if ($other_action == "update_library") {
 	}
 	
 	updateLibrary(0);
+	return;
+}else if ($other_action == "get_latest_activities") {
+	if(! $w->internet()) {
+		displayNotificationWithArtwork("Error: No internet connection",'./images/warning.png');
+		return;
+	}
+	
+	updateLibrary(5);
+	return;
 }else if ($other_action == "credentials") {
   
 	$command_output = exec("Authenticate.app/Contents/MacOS/Authenticate 2>&1");

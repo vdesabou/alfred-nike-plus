@@ -273,7 +273,9 @@ if (mb_strlen($query) < 3 ||
 	//
 	elseif (substr_count($query, '▹') == 1) {
 
-		$w->result(uniqid(), serialize(array('update_library' /*other_action*/ ,'' /* url */)), 'Update Library', "When done you'll receive a notification. you can check progress by invoking the workflow again", './images/update.png', 'yes', null, '');
+		$w->result(uniqid(), serialize(array('get_latest_activities' /*other_action*/ ,'' /* url */)), 'Update Library (get up to last 5 activities)', "When done you'll receive a notification. you can check progress by invoking the workflow again", './images/update.png', 'yes', null, '');
+		
+		$w->result(uniqid(), serialize(array('update_library' /*other_action*/ ,'' /* url */)), 'Reset Library (delete and recreate your entire library)', "When done you'll receive a notification. you can check progress by invoking the workflow again", './images/update.png', 'yes', null, '');
 
 		$w->result(uniqid(), serialize(array('credentials' /*other_action*/ ,'' /* url */)), 'Change your Nike Plus credentials', "Your password will be stored safely in your keychain", './images/credentials.png', 'yes', null, '');
 	}
