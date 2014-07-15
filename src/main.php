@@ -241,7 +241,25 @@ if (mb_strlen($query) < 3 ||
 		
 		$w->result(uniqid(), '', 'Total Distance: ' . $totalDistance . " " . $unit . " ● Runs: " . $lifetime[11], " Average Pace: " . calculatePace($lifetime[40],$lifetime[32],$use_miles) . " min/" . $unit . " ● Average Distance: " . round($totalDistance/$lifetime[11],1) . $unit . " ● Average Fuel: " . round($lifetime[38]/$lifetime[11],0), './images/' . $nikelevel . '.png', 'no', null, '');
 		
+		$totalDistanceTreadmill = $use_miles ? round($lifetime[0]* 0.6213711922,0) : round($lifetime[0],0);
+		$totalDistanceBeach = $use_miles ? round($lifetime[1]* 0.6213711922,0) : round($lifetime[1],0);
+		$totalDistanceRoad = $use_miles ? round($lifetime[2]* 0.6213711922,0) : round($lifetime[2],0);
+		$totalDistanceTrail = $use_miles ? round($lifetime[3]* 0.6213711922,0) : round($lifetime[3],0);
 		
+		$maxValue = max(array($totalDistanceTreadmill, $totalDistanceBeach, $totalDistanceRoad,$totalDistanceTrail));
+		if($maxValue == $totalDistanceTreadmill) {
+			$terrain = 'treadmill';
+		}else if($maxValue == $totalDistanceBeach) {
+			$terrain = 'beach';
+		}else if($maxValue == $totalDistanceRoad) {
+			$terrain = 'road';
+		}else if($maxValue == $totalDistanceTrail) {
+			$terrain = 'trail';
+		}
+
+			
+		$w->result(uniqid(), '', 'Road: ' . $totalDistanceRoad . " " . $unit . " ● Beach: " . $totalDistanceBeach . " " . $unit . " ● Trendmill: " . $totalDistanceTreadmill . " " . $unit . " ● Trail: " . $totalDistanceTrail . " " . $unit, 'Morning: ' . round($lifetime[59],0) . " % ● Afternoon: " . round($lifetime[57],0) . " % ● Evening: " . round($lifetime[56],0) . " % ● Night: " . round($lifetime[58],0) . " %", './images/' . $terrain . '.png', 'no', null, '');	
+				
 		$w->result(uniqid(), '', 'Browse your activities this month', 'Browse this month', '', 'no', null, 'Year▹' . date("Y") . '▹' . date("m") . '▹' );
 		
 		$w->result(uniqid(), '', 'Browse your activities by year', 'Browse by year', '', 'no', null, 'Year▹');
