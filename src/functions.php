@@ -172,41 +172,6 @@ function calculatePace($duration, $distance, $toMiles = false) {
 }
 
 /**
- * getFreeTcpPort function.
- *
- * @access public
- * @return void
- */
-function getFreeTcpPort()
-{
-	//avoid warnings like this PHP Warning:  fsockopen(): unable to connect to localhost (Connection refused)
-	error_reporting(~E_ALL);
-
-	$from = 10000;
-	$to = 20000;
-
-	//TCP ports
-	$host = 'localhost';
-
-	for($port = $from; $port <= $to ; $port++)
-	{
-		$fp = fsockopen($host , $port);
-		if (!$fp)
-		{
-			//port is free
-			return $port;
-		}
-		else
-		{
-			// port open, close it
-			fclose($fp);
-		}
-	}
-
-	return 17693;
-}
-
-/**
  * escapeQuery function.
  *
  * @access public
@@ -273,34 +238,6 @@ function displayNotificationWithArtwork($output,$artwork)
 	}
 
 	exec("./terminal-notifier.app/Contents/MacOS/terminal-notifier -title 'Nike Plus' -sender 'com.nike.plus' -contentImage '/tmp/tmp' -message '" .  $output . "'");
-}
-
-/**
- * displayNotificationForStarredTrack function.
- *
- * @access public
- * @param mixed $track_name
- * @param mixed $track_uri
- * @return void
- */
-function displayNotificationForStarredTrack($track_name,$track_uri)
-{
-	$w = new Workflows('com.vdesabou.nike.plus');
-	displayNotificationWithArtwork('⭐️ ' . $track_name . ' has been starred',getTrackOrAlbumArtwork($w,'black',$track_uri,true));
-}
-
-/**
- * displayNotificationForUnstarredTrack function.
- *
- * @access public
- * @param mixed $track_name
- * @param mixed $track_uri
- * @return void
- */
-function displayNotificationForUnstarredTrack($track_name,$track_uri)
-{
-	$w = new Workflows('com.vdesabou.nike.plus');
-	displayNotificationWithArtwork('❌ ' . $track_name . ' has been unstarred',getTrackOrAlbumArtwork($w,'black',$track_uri,true));
 }
 
 
