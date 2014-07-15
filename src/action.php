@@ -29,7 +29,8 @@ if ($other_action == "update_library") {
 	updateLibrary(0);
 }else if ($other_action == "credentials") {
   
-	$command_output = exec("Authenticate.app/Contents/MacOS/Authenticate 2>&1");		
+	$command_output = exec("Authenticate.app/Contents/MacOS/Authenticate 2>&1");
+	return;	
 }
 
 if($url != "") {
