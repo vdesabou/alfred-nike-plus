@@ -258,12 +258,12 @@ if (mb_strlen($query) < 3 ||
 		}
 
 			
-		$w->result(uniqid(), '', 'Road: ' . $totalDistanceRoad . " " . $unit . " ● Beach: " . $totalDistanceBeach . " " . $unit . " ● Trendmill: " . $totalDistanceTreadmill . " " . $unit . " ● Trail: " . $totalDistanceTrail . " " . $unit, 'Morning: ' . round($lifetime[59],0) . " % ● Afternoon: " . round($lifetime[57],0) . " % ● Evening: " . round($lifetime[56],0) . " % ● Night: " . round($lifetime[58],0) . " %", './images/' . $terrain . '.png', 'no', null, '');
+		$w->result(uniqid(), serialize(array('' /*other_action*/ ,'https://secure-nikeplus.nike.com/plus/activity/running/' . $username . '/lifetime' /* url */)), 'Road: ' . $totalDistanceRoad . " " . $unit . " ● Beach: " . $totalDistanceBeach . " " . $unit . " ● Trendmill: " . $totalDistanceTreadmill . " " . $unit . " ● Trail: " . $totalDistanceTrail . " " . $unit, 'Morning: ' . round($lifetime[59],0) . " % ● Afternoon: " . round($lifetime[57],0) . " % ● Evening: " . round($lifetime[56],0) . " % ● Night: " . round($lifetime[58],0) . " %", './images/' . $terrain . '.png', 'yes', null, '');
 		
 		$title="";
 		if(!$use_miles) {
 			if($lifetime[41] != "") {
-				$title = $title . " 1K: " . formatDuration($lifetime[41], true, false);
+				$title = "1K: " . formatDuration($lifetime[41], true, false);
 			}
 			
 			if($lifetime[18] != "") {
@@ -276,7 +276,7 @@ if (mb_strlen($query) < 3 ||
 		}
 		else {
 			if($lifetime[46] != "") {
-				$title = $title . " 1M: " . formatDuration($lifetime[46], true, false);
+				$title = "1M: " . formatDuration($lifetime[46], true, false);
 			}		
 		}
 		
@@ -305,7 +305,7 @@ if (mb_strlen($query) < 3 ||
 			$subtitle = $subtitle . " ● Most Calories: " . $lifetime[48];
 			
 		}
-		$w->result(uniqid(), serialize(array('' /*other_action*/ ,'https://secure-nikeplus.nike.com/plus/profile/vdesabou/' . $username /* url */)),$title,$subtitle, './images/trophee.png', 'yes', null, '');		
+		$w->result(uniqid(), serialize(array('' /*other_action*/ ,'https://secure-nikeplus.nike.com/plus/profile/' . $username /* url */)),$title,$subtitle, './images/trophee.png', 'yes', null, '');		
 				
 		$w->result(uniqid(), '', 'Browse your activities this month', 'Browse this month', '', 'no', null, 'Year▹' . date("Y") . '▹' . date("m") . '▹' );
 		
@@ -622,7 +622,7 @@ if (mb_strlen($query) < 3 ||
 				
 				$title = $weather . $emotion . ' ';
 				$title = $title . date("l jS", strtotime($activity[5]));
-				$tilte = $title . " ( Distance: " . $distance . " " . $unit . " ● Average Pace: " . calculatePace($activity[29],$activity[24],$use_miles) . " min/" . $unit . " )";
+				$tilte = $title . " ● Distance: " . $distance . " " . $unit . " ● Average Pace: " . calculatePace($activity[29],$activity[24],$use_miles) . " min/" . $unit . "";
 
 	
 				$w->result(uniqid(), serialize(array('' /*other_action*/ ,'https://secure-nikeplus.nike.com/plus/activity/running/' . $username . '/detail/' . $activity[0] /* url */)),$tilte,$subtitle, './images/' . $activity[17] . '.png', 'yes', null, '');
