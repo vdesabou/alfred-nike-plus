@@ -1,15 +1,9 @@
 # Alfred Nike Plus
 
 
-This is an Alfred Workflow to get your Nike Plus running activities.
-
-## Download the workflow on Packal
-
-[![Download Workflow](https://raw.github.com/vdesabou/alfred-spotify-mini-player/master/images/alfred-workflow-icon.png)](http://www.packal.org/workflow/spotify-mini-player)
-
 ## Description
 
-Use this workflow to get all your Nike Plus statistics and runs
+This is an Alfred Workflow to get your Nike Plus statistics and running activities.
 
 
 ![Screenshot](https://i.cloudup.com/cMr0mHji7a.gif)
@@ -34,12 +28,13 @@ The workflow checks for update once per day, if an update is available, it will 
 
 Note that you can also force a check for update in Settings section
 
+
 ## Credits
 
 * [Nike+ PHP](http://nikeplusphp.org)
 * [Authenticate for Alfred](http://www.dirtdon.com/Authenticate/)
 * [Terminal-Notifier](https://github.com/alloy/terminal-notifier)
 
+## Download the workflow on Packal
 
-
-
+[![Download Workflow](https://raw.github.com/vdesabou/alfred-spotify-mini-player/master/images/alfred-workflow-icon.png)](http://www.packal.org/workflow/spotify-mini-player)
