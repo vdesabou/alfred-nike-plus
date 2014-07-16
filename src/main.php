@@ -12,7 +12,7 @@ require('./src/functions.php');
 require_once('./src/workflows.php');
 $w = new Workflows('com.vdesabou.nike.plus');
 
-$query = escapeQuery($argv[1]);
+$query = $argv[1];
 # thanks to http://www.alfredforum.com/topic/1788-prevent-flash-of-no-result
 $query = iconv('UTF-8-MAC', 'UTF-8', $query);
 

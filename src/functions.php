@@ -172,46 +172,6 @@ function calculatePace($duration, $distance, $toMiles = false) {
 }
 
 /**
- * escapeQuery function.
- *
- * @access public
- * @param mixed $text
- * @return void
- */
-function escapeQuery($text)
-{
-	$text = str_replace("'", "’", $text);
-	$text = str_replace('"', "’", $text);
-	$text = str_replace("&apos;", "’", $text);
-	$text = str_replace("`", "’", $text);
-	$text = str_replace("&amp;", "and", $text);
-	$text = str_replace("&", "and", $text);
-	$text = str_replace("\\", " ", $text);
-	$text = str_replace("$", "\\$", $text);
-	return $text;
-}
-
-/**
- * checkIfResultAlreadyThere function.
- *
- * @access public
- * @param mixed $results
- * @param mixed $title
- * @return void
- */
-function checkIfResultAlreadyThere($results, $title)
-{
-	foreach ($results as $result) {
-		if ($result['title']) {
-			if ($result['title'] == $title) {
-				return true;
-			}
-		}
-	}
-	return false;
-}
-
-/**
  * displayNotification function.
  *
  * @access public
@@ -906,18 +866,6 @@ function updateLibrary($limit = 0)
 
 
 /**
- * removeUpdateLibraryInProgressFile function.
- *
- * @access public
- * @return void
- */
-function removeUpdateLibraryInProgressFile()
-{
-	$w = new Workflows('com.vdesabou.nike.plus');
-	unlink($w->data() . "/update_library_in_progress");
-}
-
-/**
  * handleDbIssue function.
  *
  * @access public
@@ -979,17 +927,6 @@ function mb_unserialize($string) {
 	return unserialize($string);
 }
 
-/**
- * strip_string function.
- *
- * @access public
- * @param mixed $string
- * @return void
- */
-function strip_string($string)
-{
-	return preg_replace('/[^a-zA-Z0-9-\s]/', '', $string);
-}
 
 /**
  * checkForUpdate function.
