@@ -6,7 +6,7 @@
 This is an Alfred Workflow to get your Nike Plus statistics and running activities.
 
 
-![Screenshot](https://i.cloudup.com/cMr0mHji7a.gif)
+![Screenshot](https://i.cloudup.com/QRlUFoNQJR.gif)
 
 ## Features
 
