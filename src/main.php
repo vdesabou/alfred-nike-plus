@@ -305,9 +305,9 @@ if (mb_strlen($query) < 3 ||
 		}
 		$w->result(uniqid(), serialize(array('' /*other_action*/ ,'https://secure-nikeplus.nike.com/plus/profile/' . $username /* url */)),$title,$subtitle, './images/trophee.png', 'yes', null, '');		
 				
-		$w->result(uniqid(), '', 'Browse your activities this month', 'Browse this month', '', 'no', null, 'Year▹' . date("Y") . '▹' . date("m") . '▹' );
+		$w->result(uniqid(), '', 'Browse your activities this month', 'Browse this month', './images/' . date("m") . '.png', 'no', null, 'Year▹' . date("Y") . '▹' . date("m") . '▹' );
 		
-		$w->result(uniqid(), '', 'Browse your activities by year', 'Browse by year', '', 'no', null, 'Year▹');
+		$w->result(uniqid(), '', 'Browse your activities by year', 'Browse by year', './images/' . date("Y") . '.png', 'no', null, 'Year▹');
 		
 
 		$w->result(uniqid(), '', 'Settings', 'Search scope=<all>, Max results=<' . $max_results . '>, Spotifious is <' . $spotifious_state . '>, Alfred Playlist is <' . $alfred_playlist_state . '>', './images/credentials.png', 'no', null, 'Settings▹');		
