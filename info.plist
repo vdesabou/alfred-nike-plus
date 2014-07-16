@@ -60,7 +60,7 @@
 	<key>disabled</key>
 	<false/>
 	<key>name</key>
-	<string>Nike Plus</string>
+	<string>Nike Plus 1.0</string>
 	<key>objects</key>
 	<array>
 		<dict>
@@ -219,6 +219,6 @@
 		</dict>
 	</dict>
 	<key>webaddress</key>
-	<string></string>
+	<string>https://github.com/vdesabou/alfred-nike-plus</string>
 </dict>
 </plist>
