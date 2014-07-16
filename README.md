@@ -9,17 +9,10 @@ This is an Alfred Workflow to get your Nike Plus running activities.
 
 ## Description
 
-Use this workflow to get all your Nike Plus statistics and activities.
+Use this workflow to get all your Nike Plus statistics and runs
 
-## Screencast
 
-See it in action here [screencast](http://quick.as/nmwxcxx0)
-
-## Animated Gifs
-
-* Search in all your playlists
-
-![Screenshot](https://i.cloudup.com/pKTGG2faiC.gif)
+![Screenshot](https://i.cloudup.com/cMr0mHji7a.gif)
 
 ## Features
 
@@ -32,7 +25,7 @@ See it in action here [screencast](http://quick.as/nmwxcxx0)
 
 * Check for workflow update
 * Use Miles instead of KM
-* Install/Update of the library
+* Install/Refresh of the library
 
 
 ## Auto-Update
