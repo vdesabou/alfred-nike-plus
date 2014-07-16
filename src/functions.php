@@ -220,7 +220,7 @@ function checkIfResultAlreadyThere($results, $title)
  */
 function displayNotification($output)
 {
-	exec('./terminal-notifier.app/Contents/MacOS/terminal-notifier -title "Nike Plus" -sender com.nike.plus -message "' .  $output . '"');
+	exec('./terminal-notifier.app/Contents/MacOS/terminal-notifier -title "Nike Plus" -sender com.vdesabou.nike.plus -message "' .  $output . '"');
 }
 
 /**
@@ -237,7 +237,7 @@ function displayNotificationWithArtwork($output,$artwork)
 		copy($artwork,"/tmp/tmp");
 	}
 
-	exec("./terminal-notifier.app/Contents/MacOS/terminal-notifier -title 'Nike Plus' -sender 'com.nike.plus' -contentImage '/tmp/tmp' -message '" .  $output . "'");
+	exec("./terminal-notifier.app/Contents/MacOS/terminal-notifier -title 'Nike Plus' -sender 'com.vdesabou.nike.plus' -contentImage '/tmp/tmp' -message '" .  $output . "'");
 }
 
 
@@ -1021,7 +1021,7 @@ No internet connection",'./images/warning.png');
 		$xml = $w->read('./packal/package.xml');
 		$workflow= new SimpleXMLElement($xml);
 		$local_version = $workflow->version;
-		$remote_json = "https://raw.githubusercontent.com/vdesabou/alfred-spotify-mini-player/master/remote.json";
+		$remote_json = "https://raw.githubusercontent.com/vdesabou/alfred-nike-plus/master/remote.json";
 
 		// get remote information
 		$jsonDataRemote = $w->request($remote_json);
@@ -1040,7 +1040,7 @@ the export.json " . $remote_json . " file cannot be found");
 
 			if($local_version < $remote_version) {
 
-				$workflow_file_name = exec('printf $HOME') . '/Downloads/spotify-app-miniplayer-' . $remote_version . '.alfredworkflow';
+				$workflow_file_name = exec('printf $HOME') . '/Downloads/nike-plus' . $remote_version . '.alfredworkflow';
 				$fp = fopen($workflow_file_name , 'w+');
 				$options = array(
 					CURLOPT_FILE => $fp
