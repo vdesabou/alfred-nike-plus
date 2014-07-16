@@ -123,7 +123,7 @@ $last_check_update_time = $setting[2];
 
 $unit="km";
 if($use_miles==1){
-	$unit = "mile";
+	$unit = "miles";
 }
 // check for correct configuration
 if (file_exists($w->data() . '/library.db')) {
@@ -239,7 +239,7 @@ if (mb_strlen($query) < 3 ||
 		}
 
 		
-		$w->result(uniqid(), '', 'Total Distance: ' . $totalDistance . " " . $unit . " ● Runs: " . $lifetime[11], " Average Pace: " . calculatePace($lifetime[40],$lifetime[32],$use_miles) . " min/" . $unit . " ● Average Distance: " . round($totalDistance/$lifetime[11],1) . $unit . " ● Average Fuel: " . round($lifetime[38]/$lifetime[11],0), './images/' . $nikelevel . '.png', 'no', null, '');
+		$w->result(uniqid(), '', 'Total Distance: ' . $totalDistance . " " . $unit . " ● Total Runs: " . $lifetime[11] . " ● Total Duration: " . round($lifetime[40]/1000/60/60,0) . " hours", " Average Pace: " . calculatePace($lifetime[40],$lifetime[32],$use_miles) . " min/" . $unit . " ● Average Distance: " . round($totalDistance/$lifetime[11],1) . $unit . " ● Average Fuel: " . round($lifetime[38]/$lifetime[11],0), './images/' . $nikelevel . '.png', 'no', null, '');
 		
 		$totalDistanceTreadmill = $use_miles ? round($lifetime[0]* 0.6213711922,0) : round($lifetime[0],0);
 		$totalDistanceBeach = $use_miles ? round($lifetime[1]* 0.6213711922,0) : round($lifetime[1],0);
@@ -258,7 +258,54 @@ if (mb_strlen($query) < 3 ||
 		}
 
 			
-		$w->result(uniqid(), '', 'Road: ' . $totalDistanceRoad . " " . $unit . " ● Beach: " . $totalDistanceBeach . " " . $unit . " ● Trendmill: " . $totalDistanceTreadmill . " " . $unit . " ● Trail: " . $totalDistanceTrail . " " . $unit, 'Morning: ' . round($lifetime[59],0) . " % ● Afternoon: " . round($lifetime[57],0) . " % ● Evening: " . round($lifetime[56],0) . " % ● Night: " . round($lifetime[58],0) . " %", './images/' . $terrain . '.png', 'no', null, '');	
+		$w->result(uniqid(), '', 'Road: ' . $totalDistanceRoad . " " . $unit . " ● Beach: " . $totalDistanceBeach . " " . $unit . " ● Trendmill: " . $totalDistanceTreadmill . " " . $unit . " ● Trail: " . $totalDistanceTrail . " " . $unit, 'Morning: ' . round($lifetime[59],0) . " % ● Afternoon: " . round($lifetime[57],0) . " % ● Evening: " . round($lifetime[56],0) . " % ● Night: " . round($lifetime[58],0) . " %", './images/' . $terrain . '.png', 'no', null, '');
+		
+		$title="";
+		if(!$use_miles) {
+			if($lifetime[41] != "") {
+				$title = $title . " 1K: " . formatDuration($lifetime[41], true, false);
+			}
+			
+			if($lifetime[18] != "") {
+				$title = $title . " ● 5K: " . formatDuration($lifetime[18], true, false);
+			}
+			
+			if($lifetime[21] != "") {
+				$title = $title . " ● 10K: " . formatDuration($lifetime[21], true, false);
+			}
+		}
+		else {
+			if($lifetime[46] != "") {
+				$title = $title . " 1M: " . formatDuration($lifetime[46], true, false);
+			}		
+		}
+		
+			
+		if($lifetime[25] != "") {
+			$title = $title . " ● Half-Marathon: " . formatDuration($lifetime[25], true, false);
+		}
+		
+		if($lifetime[9] != "") {
+			$title = $title . " ● Marathon: " . formatDuration($lifetime[9], true, false);
+		}
+		
+		
+		$subtitle = "";
+		if($lifetime[22] != "") {
+			$runFarthest = $use_miles ? round($lifetime[22]* 0.6213711922,2) : round($lifetime[22],2);
+			$subtitle = $subtitle . "Longest distance: " . $runFarthest . " " . $unit;		
+		}
+		
+		if($lifetime[47] != "") {
+			$subtitle = $subtitle . " ● Longest Duration: " . formatDuration($lifetime[47], true, false);
+			
+		}
+		
+		if($lifetime[48] != "") {
+			$subtitle = $subtitle . " ● Most Calories: " . $lifetime[48];
+			
+		}
+		$w->result(uniqid(), serialize(array('' /*other_action*/ ,'https://secure-nikeplus.nike.com/plus/profile/vdesabou/' . $username /* url */)),$title,$subtitle, './images/trophee.png', 'yes', null, '');		
 				
 		$w->result(uniqid(), '', 'Browse your activities this month', 'Browse this month', '', 'no', null, 'Year▹' . date("Y") . '▹' . date("m") . '▹' );
 		
