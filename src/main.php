@@ -100,7 +100,7 @@ if (!file_exists($w->data() . '/settings.db')) {
 
 		$stmt = $dbsettings->prepare($getSettings);
 
-		$w->result(uniqid(), '', 'Settings have been reset to default values', 'Please invoke again the workflow now to enjoy the Spotify Mini Player', './images/warning.png', 'no', null, '');
+		$w->result(uniqid(), '', 'Settings have been reset to default values', 'Please invoke again the workflow now to enjoy the Nike Plus workflow', './images/warning.png', 'no', null, '');
 		echo $w->toxml();
 		return;
 
@@ -164,7 +164,6 @@ else {
 	return;
 }
 
-/*
 $check_results = checkForUpdate($w,$last_check_update_time,$dbsettings);
 if($check_results != null && is_array($check_results))
 {
@@ -174,7 +173,6 @@ if($check_results != null && is_array($check_results))
 	echo $w->toxml();
 	return;
 }
-*/
 
 // set the default timezone to use.
 date_default_timezone_set('UTC');
@@ -343,6 +341,14 @@ if (mb_strlen($query) < 3 ||
 					'fn' => 'Not Available',
 					'ctrl' => 'Not Available'), './images/check.png', 'yes', null, '');
 		}
+		
+		$w->result(uniqid(), serialize(array('check_for_update' /*other_action*/ ,'' /* url */)), 'Check for workflow update', array(
+				"Note this is automatically done otherwise once per day",
+				'alt' => 'Not Available',
+				'cmd' => 'Not Available',
+				'shift' => 'Not Available',
+				'fn' => 'Not Available',
+				'ctrl' => 'Not Available'), './images/check_update.png', 'yes', null, '');
 	}
 } else {
 	////////////
