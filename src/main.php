@@ -481,6 +481,38 @@ if (mb_strlen($query) < 3 ||
 				handleDbIssuePdo($theme,$db);
 				return;
 			}
+			
+			// summary of the month
+			try {
+	
+				$getActivities = "select * from activities where strftime('%Y',startTimeUtc)=:year";
+	
+				$stmt2 = $db->prepare($getActivities);
+				$stmt2->bindValue(':year', '' . $year . '');	
+				$stmt2->execute();
+	
+			} catch (PDOException $e) {
+				handleDbIssuePdo($theme,$db);
+				return;
+			}
+
+			// get all activities for year
+			$total_duration=0;
+			$total_distance=0;
+			$total_activities=0;
+			$total_fuel=0;
+			$total_calories=0;
+			while ($activity = $stmt2->fetch()) {
+	
+				$noresult=false;
+				$total_duration+=$activity[29];
+				$total_distance+=$activity[24];
+				$total_activities++;
+				$total_fuel+=$activity[26];
+				$total_calories+=$activity[28];
+			}
+			$distance = $use_miles ? round($total_distance* 0.6213711922,2) : round($total_distance,2);
+			$w->result(uniqid(), '', "TOTAL 🏃 Runs: " . $total_activities  . " ● Distance: " . $distance . " " . $unit . " ● Average Pace: " . calculatePace($total_duration,$total_distance,$use_miles) . " min/" . $unit . "", "Fuel: " . $total_fuel . " ● Calories: " . $total_calories, './images/' . $year . '.png', 'no', null, "Year▹" . $activityByYear[0] . "▹");
 	
 			// display all months
 			$noresult=true;
@@ -550,7 +582,7 @@ if (mb_strlen($query) < 3 ||
 
 			$year = $words[1];
 			$month = $words[2];
-
+				
 			//
 			
 			try {
@@ -567,7 +599,40 @@ if (mb_strlen($query) < 3 ||
 				return;
 			}
 				
-			// display all activity
+			// display summary of month
+			try {
+	
+				$getActivities = "select * from activities where (strftime('%m',startTimeUtc)=:month and strftime('%Y',startTimeUtc)=:year)";
+	
+				$stmt2 = $db->prepare($getActivities);
+				$stmt2->bindValue(':year', '' . $year . '');
+				$stmt2->bindValue(':month', '' . $month . '');	
+				$stmt2->execute();
+	
+			} catch (PDOException $e) {
+				handleDbIssuePdo($theme,$db);
+				return;
+			}
+
+			$total_duration=0;
+			$total_distance=0;
+			$total_activities=0;
+			$total_fuel=0;
+			$total_calories=0;
+			while ($activity = $stmt2->fetch()) {
+	
+				$noresult=false;
+				$total_duration+=$activity[29];
+				$total_distance+=$activity[24];
+				$total_activities++;
+				$total_fuel+=$activity[26];
+				$total_calories+=$activity[28];
+			}			
+
+			$distance = $use_miles ? round($total_distance* 0.6213711922,2) : round($total_distance,2);
+			$w->result(uniqid(), '', "TOTAL 🏃 Runs: " . $total_activities  . " ● Distance: " . $distance . " " . $unit . " ● Average Pace: " . calculatePace($total_duration,$total_distance,$use_miles) . " min/" . $unit . "", "Fuel: " . $total_fuel . " ● Calories: " . $total_calories, './images/' . $month . '.png', 'no', null, "Year▹" . $year . "▹" . $activityByMonth[0] . "▹");
+			
+			// display all activities
 			$noresult=true;
 			while ($activity = $stmt->fetch()) {
 	
