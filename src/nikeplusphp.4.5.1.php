@@ -26,9 +26,9 @@ class NikePlusPHP {
 	public $loginCookies, $userId, $activities = false, $allTime = false, $routes = false;
 
 	/**
-	 * Private variables
+	 * protected variables
 	 */
-	private $_cookie, $_userAgent = 'Mozilla/5.0';
+	protected $_cookie, $_userAgent = 'Mozilla/5.0';
 
 	/**
 	 * __construct()
@@ -81,7 +81,7 @@ class NikePlusPHP {
 		$this->_cookie = $header;
 		$this->loginCookies = json_decode($body);
 		$this->userId = $this->loginCookies->serviceResponse->body->User->screenName;
-		$this->allTime();
+		//$this->allTime();
 	}
 
 	/**

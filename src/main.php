@@ -62,7 +62,7 @@ try {
 	$dbsettings->query("PRAGMA cache_size=700000");
 	$dbsettings->query("PRAGMA compile_options");
 } catch (PDOException $e) {
-	handleDbIssuePdo('new',$dbsettings);
+	handleDbIssuePdo($dbsettings);
 	$dbsettings=null;
 	return;
 }
@@ -105,7 +105,7 @@ if (!file_exists($w->data() . '/settings.db')) {
 		return;
 
 	} catch (PDOException $e) {
-		handleDbIssuePdo('new',$dbsettings);
+		handleDbIssuePdo($dbsettings);
 		return;
 	}
 }
@@ -114,7 +114,7 @@ try {
 	$setting = $stmt->fetch();
 }
 catch (PDOException $e) {
-	handleDbIssuePdo('new',$dbsettings);
+	handleDbIssuePdo($dbsettings);
 	return;
 }
 $username = $setting[0];
@@ -143,7 +143,7 @@ if (file_exists($w->data() . '/library.db')) {
 		$db->query("PRAGMA cache_size=700000");
 		$db->query("PRAGMA compile_options");
 	} catch (PDOException $e) {
-		handleDbIssuePdo($theme,$db);
+		handleDbIssuePdo($db);
 		return;
 	}
 
@@ -192,7 +192,7 @@ if (mb_strlen($query) < 3 ||
 			$lifetime = $stmt->fetch();
 
 		} catch (PDOException $e) {
-			handleDbIssuePdo($theme,$db);
+			handleDbIssuePdo($db);
 			return;
 		}
 
@@ -395,7 +395,7 @@ if (mb_strlen($query) < 3 ||
 				$stmt->execute();
 	
 			} catch (PDOException $e) {
-				handleDbIssuePdo($theme,$db);
+				handleDbIssuePdo($db);
 				return;
 			}
 	
@@ -414,7 +414,7 @@ if (mb_strlen($query) < 3 ||
 					$stmt2->execute();
 		
 				} catch (PDOException $e) {
-					handleDbIssuePdo($theme,$db);
+					handleDbIssuePdo($db);
 					return;
 				}
 	
@@ -478,7 +478,7 @@ if (mb_strlen($query) < 3 ||
 				$stmt->execute();
 	
 			} catch (PDOException $e) {
-				handleDbIssuePdo($theme,$db);
+				handleDbIssuePdo($db);
 				return;
 			}
 			
@@ -492,7 +492,7 @@ if (mb_strlen($query) < 3 ||
 				$stmt2->execute();
 	
 			} catch (PDOException $e) {
-				handleDbIssuePdo($theme,$db);
+				handleDbIssuePdo($db);
 				return;
 			}
 
@@ -530,7 +530,7 @@ if (mb_strlen($query) < 3 ||
 					$stmt2->execute();
 		
 				} catch (PDOException $e) {
-					handleDbIssuePdo($theme,$db);
+					handleDbIssuePdo($db);
 					return;
 				}
 	
@@ -595,7 +595,7 @@ if (mb_strlen($query) < 3 ||
 				$stmt->execute();
 	
 			} catch (PDOException $e) {
-				handleDbIssuePdo($theme,$db);
+				handleDbIssuePdo($db);
 				return;
 			}
 				
@@ -610,7 +610,7 @@ if (mb_strlen($query) < 3 ||
 				$stmt2->execute();
 	
 			} catch (PDOException $e) {
-				handleDbIssuePdo($theme,$db);
+				handleDbIssuePdo($db);
 				return;
 			}
 

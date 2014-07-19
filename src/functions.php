@@ -228,33 +228,56 @@ function updateLibrary($limit = 0)
 		return;
 	}
 	
-
-	$setSettings = "update settings set username='" . $n->userId . "'";
-	$dbfile = $w->data() . "/settings.db";
-	exec("sqlite3 \"$dbfile\" \"$setSettings\"");
+	$dbfile = $w->data() . '/settings.db';
 	
+	try {
+		$dbsettings = new PDO("sqlite:$dbfile","","",array(PDO::ATTR_PERSISTENT => true));
+		$dbsettings->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	} catch (PDOException $e) {
+		handleDbIssuePdo($dbsettings);
+		$dbsettings=null;
+		return;
+	}
+	
+	try {
+		$setSettings = "update settings set username=:userid";
+		$stmt = $dbsettings->prepare($setSettings);
+		$stmt->bindValue(':userid', '' . $n->userId . '');
+		$stmt->execute();
+	
+	} catch (PDOException $e) {
+		displayNotification("Error: cannot set username");
+		unlink($w->data() . "/update_library_in_progress");
+		return;
+	}
+		
 	
 	$in_progress_data = $w->read('update_library_in_progress');
 
 	//
 	// Read settings from DB
 	//
-	$getSettings = 'select use_miles from settings';
-	$dbfile = $w->data() . '/settings.db';
-	exec("sqlite3 -separator '	' \"$dbfile\" \"$getSettings\" 2>&1", $settings, $returnValue);
-
-	if ($returnValue != 0) {
+	try {
+		$getSettings = 'select use_miles from settings';
+		$stmt = $dbsettings->prepare($getSettings);
+		$stmt->execute();
+	
+	} catch (PDOException $e) {
 		displayNotification("Error: cannot read settings");
 		unlink($w->data() . "/update_library_in_progress");
 		return;
 	}
 
 
-	foreach ($settings as $setting):
+	try {
+		$setting = $stmt->fetch();
+	}
+	catch (PDOException $e) {
+		handleDbIssuePdo($dbsettings);
+		return;
+	}
+	$use_miles = $setting[0];
 
-		$setting = explode("	", $setting);
-		$use_miles = $setting[0];
-	endforeach;
 
 	$words = explode('▹', $in_progress_data);
 
@@ -275,12 +298,68 @@ function updateLibrary($limit = 0)
 			}
 			touch($w->data() . "/library.db");
 	
-			$sql = 'sqlite3 "' . $w->data() . '/library.db" ' . ' "create table activities (activityId text PRIMARY KEY NOT NULL, heartrate boolean, gps boolean, activityType text, activeTime int, startTimeUtc text, latitude text, longitude text, timeZone text, dstOffset text, deviceType text, timeZoneId text, name text, status text,weather text,emotion text,note text,terrain text,shoes_activityCount int, shoes_percentage float, shoes_name text, shoes_distance float, shoes_retired boolean, averageHeartRate int,distance float, maximumHeartRate int, fuel int, steps int, calories int, duration int, minimumHeartRate int, address text)"';
-			exec($sql);
+			$dbfile = $w->data() . '/library.db';
+		
+			try {
+				$db = new PDO("sqlite:$dbfile","","",array(PDO::ATTR_PERSISTENT => true));
+		
+				$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+				$db->query("PRAGMA synchronous = OFF");
+				$db->query("PRAGMA journal_mode = OFF");
+				$db->query("PRAGMA temp_store = MEMORY");
+				$db->query("PRAGMA count_changes = OFF");
+				$db->query("PRAGMA PAGE_SIZE = 4096");
+				$db->query("PRAGMA default_cache_size=700000");
+				$db->query("PRAGMA cache_size=700000");
+				$db->query("PRAGMA compile_options");
+			} catch (PDOException $e) {
+				displayNotification("Error: cannot create library");
+				unlink($w->data() . "/update_library_in_progress");
+				return;
+			}
+			
+			try {
+				$createTable = "create table activities (activityId text PRIMARY KEY NOT NULL, heartrate boolean, gps boolean, activityType text, activeTime int, startTimeUtc text, latitude text, longitude text, timeZone text, dstOffset text, deviceType text, timeZoneId text, name text, status text,weather text,emotion text,note text,terrain text,shoes_activityCount int, shoes_percentage float, shoes_name text, shoes_distance float, shoes_retired boolean, averageHeartRate int,distance float, maximumHeartRate int, fuel int, steps int, calories int, duration int, minimumHeartRate int, address text)";
+				$stmt = $db->prepare($createTable);
+				$stmt->execute();
+			
+			} catch (PDOException $e) {
+				displayNotification("Error: cannot create table");
+				unlink($w->data() . "/update_library_in_progress");
+				return;
+			}
 	
-	
-			$sql = 'sqlite3 "' . $w->data() . '/library.db" ' . ' "CREATE INDEX IndexStartTimeUtc ON activities (startTimeUtc)"';
-			exec($sql);
+			try {
+				$createIndex = "CREATE INDEX IndexStartTimeUtc ON activities (startTimeUtc)";
+				$stmt = $db->prepare($createIndex);
+				$stmt->execute();
+			
+			} catch (PDOException $e) {
+				displayNotification("Error: cannot create index");
+				unlink($w->data() . "/update_library_in_progress");
+				return;
+			}	
+		} else {
+
+			$dbfile = $w->data() . '/library.db';
+		
+			try {
+				$db = new PDO("sqlite:$dbfile","","",array(PDO::ATTR_PERSISTENT => true));
+		
+				$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+				$db->query("PRAGMA synchronous = OFF");
+				$db->query("PRAGMA journal_mode = OFF");
+				$db->query("PRAGMA temp_store = MEMORY");
+				$db->query("PRAGMA count_changes = OFF");
+				$db->query("PRAGMA PAGE_SIZE = 4096");
+				$db->query("PRAGMA default_cache_size=700000");
+				$db->query("PRAGMA cache_size=700000");
+				$db->query("PRAGMA compile_options");
+			} catch (PDOException $e) {
+				displayNotification("Error: cannot open library");
+				unlink($w->data() . "/update_library_in_progress");
+				return;
+			}				
 		}
 
 		$nb_activities=0;
@@ -419,19 +498,24 @@ function updateLibrary($limit = 0)
 				}
 								
 			}
+						
+			try {
+				$insert = 'insert into activities values (' . '"' . $activity['activityId'] . '",' . $heartrate. ',' . $gps . ',"' . $activity['activityType'] . '",' . $activity['activeTime'] . ',"' . $activity['startTimeUtc'] . '","' . $latitude . '","' . $longitude. '","' . $activity['timeZone'] . '","' . $dstOffset . '"' . ',"' . $activity['deviceType'] . '"' . ',"' . $timeZoneId . '"' . ',"' . $activity['name'] . '"' . ',"' . $activity['status'] . '"' . ',"' . $weather . '"' . ',"' . $emotion . '"' . ',"' . $note . '"' . ',"' . $terrain . '"' . ',' . $shoes_activityCount . '' . ',' . $shoes_percentage . '' . ',"' . $shoes_name . '"' . ',' . $shoes_distance . '' . ',' . $shoes_retired . '' . ',' . $averageHeartRate . '' . ',' . $distance . '' . ',' . $maximumHeartRate . '' . ',' . $fuel . '' . ',' . $steps . '' . ',' . $calories . '' . ',' . $duration . '' . ',' . $minimumHeartRate . ',' . '"'. $address . '"' .')';
+				$db->exec($insert);
+				
+				$nb_activities++;
 			
-			$sql = 'sqlite3 "' . $w->data() . '/library.db" ' . '"insert or ignore into activities values (' . '\"' . $activity['activityId'] . '\",' . $heartrate. ',' . $gps . ',\"' . $activity['activityType'] . '\",' . $activity['activeTime'] . ',\"' . $activity['startTimeUtc'] . '\",\"' . $latitude . '\",\"' . $longitude. '\",\"' . $activity['timeZone'] . '\",\"' . $dstOffset . '\"' . ',\"' . $activity['deviceType'] . '\"' . ',\"' . $timeZoneId . '\"' . ',\"' . $activity['name'] . '\"' . ',\"' . $activity['status'] . '\"' . ',\"' . $weather . '\"' . ',\"' . $emotion . '\"' . ',\"' . $note . '\"' . ',\"' . $terrain . '\"' . ',' . $shoes_activityCount . '' . ',' . $shoes_percentage . '' . ',\"' . $shoes_name . '\"' . ',' . $shoes_distance . '' . ',' . $shoes_retired . '' . ',' . $averageHeartRate . '' . ',' . $distance . '' . ',' . $maximumHeartRate . '' . ',' . $fuel . '' . ',' . $steps . '' . ',' . $calories . '' . ',' . $duration . '' . ',' . $minimumHeartRate . ',' . '\"'. $address . '\"' .')"';
+			} catch (PDOException $e) {
+				
+				// ignored
+				// happen when we get last x activities
+				
+			}
 
-			exec($sql);
-			
-			$nb_activities++;
-			
 			if ($nb_activities % 5 === 0) {
 				$w->write('Library▹' . $nb_activities . '▹' . $nb_activitiestotal . '▹' . $words[3], 'update_library_in_progress');
 			}
-			
-			//echo "$sql\n";				
-
+				
 		}
 	} else {
 		unlink($w->data() . "/update_library_in_progress");
@@ -445,14 +529,24 @@ function updateLibrary($limit = 0)
 	$json = json_decode($jsonData, true);
 	if (json_last_error() === JSON_ERROR_NONE) {
 	
-
-		$sql = 'sqlite3 "' . $w->data() . '/library.db" ' . ' "drop table lifetime"';
-		exec($sql);
+		try {
+			$drop = "drop table lifetime";
+			$db->exec($drop);
 		
-		$sql = 'sqlite3 "' . $w->data() . '/library.db" ' . ' "create table lifetime (treadmill float, beach float, road float,trail float,fuelHeartRate float,distanceHeartRate float,averagePace2 float,durationCardio int, earlyMorningCount int, fastestMarathon int, workoutCardio int, run int, stepWeekAverage float,heartRateAverage float, earlyAfternoonCount int, lateAfternoonCount int, workoutPedo int, lastUpdated int, fastest5K int, runPerWeekAverage float, userActivityLifetimeId text, fastest10K int, runFarthest float,durationHeartRate float, distanceCardio int, fastestHalfMarathon int, earlyEveningCount int, stepDateLongest int, caloriePedo int, runFarthestCardio int, maxRunsPerWeek int, durationPedo int, distance float, calorieHeartRate float, earlyNightCount int, stepCountAverage float, paceHeartRate float, daytimeCount int, totalFuel int, lateMorningCount int, duration int, fastest1K int, heartRateRun int, brightAndEarlyCount int, workoutHeartRate float, smallHoursCount int, fastest1M int, longestRunDuration int, mostCaloriesBurnedSingleRun int, morningCount int, calorie int, stepTotal int, stepCountLongest int, calorieCardio int, caloriePedoTotal int, eveningCount int, night float, afternoon float, smallHours float, morning float)"';
-		exec($sql);
+		} catch (PDOException $e) {
+			// ignore, happen for the first time
+		}
 
+		try {
+			$createTable = "create table lifetime (treadmill float, beach float, road float,trail float,fuelHeartRate float,distanceHeartRate float,averagePace2 float,durationCardio int, earlyMorningCount int, fastestMarathon int, workoutCardio int, run int, stepWeekAverage float,heartRateAverage float, earlyAfternoonCount int, lateAfternoonCount int, workoutPedo int, lastUpdated int, fastest5K int, runPerWeekAverage float, userActivityLifetimeId text, fastest10K int, runFarthest float,durationHeartRate float, distanceCardio int, fastestHalfMarathon int, earlyEveningCount int, stepDateLongest int, caloriePedo int, runFarthestCardio int, maxRunsPerWeek int, durationPedo int, distance float, calorieHeartRate float, earlyNightCount int, stepCountAverage float, paceHeartRate float, daytimeCount int, totalFuel int, lateMorningCount int, duration int, fastest1K int, heartRateRun int, brightAndEarlyCount int, workoutHeartRate float, smallHoursCount int, fastest1M int, longestRunDuration int, mostCaloriesBurnedSingleRun int, morningCount int, calorie int, stepTotal int, stepCountLongest int, calorieCardio int, caloriePedoTotal int, eveningCount int, night float, afternoon float, smallHours float, morning float)";
+			$db->exec($createTable);
 		
+		} catch (PDOException $e) {
+			displayNotification("Error: cannot create table lifetime " . $e);
+			unlink($w->data() . "/update_library_in_progress");
+			return;
+		}
+						
 		$treadmill = 0.0;
 		$beach = 0.0;
 		$road = 0.0;
@@ -776,7 +870,8 @@ function updateLibrary($limit = 0)
 		}
 		
 		
-		$sql = 'sqlite3 "' . $w->data() . '/library.db" ' . '"insert into lifetime values (' 
+		try {
+			$insert = 'insert into lifetime values (' 
 		. $treadmill
 		. ',' . $beach
 		. ',' . $road
@@ -797,8 +892,8 @@ function updateLibrary($limit = 0)
 		. ',' . $lastUpdated
 		. ',' . $fastest5K
 		. ',' . $runPerWeekAverage
-		. ',\"' . $userActivityLifetimeId
-		. '\",' . $fastest10K
+		. ',"' . $userActivityLifetimeId
+		. '",' . $fastest10K
 		. ',' . $runFarthest
 		. ',' . $durationHeartRate
 		. ',' . $distanceCardio
@@ -837,14 +932,15 @@ function updateLibrary($limit = 0)
 		. ',' . $afternoon
 		. ',' . $smallHours
 		. ',' . $morning
-		.')"';
-
-		exec($sql);
+		.')';
+			$db->exec($insert);
 		
-		
-		//echo "$sql\n";				
-
-		
+		} catch (PDOException $e) {
+			displayNotification("Error: cannot insert into table lifetime " . $e);
+			unlink($w->data() . "/update_library_in_progress");
+			return;
+		}
+				
 		$elapsed_time = time() - $words[3];
 		if($limit == 0) {
 			displayNotification("Library has been created (" . $nb_activities . " activities) - it took " . beautifyTime($elapsed_time));
@@ -872,7 +968,7 @@ function updateLibrary($limit = 0)
  * @param mixed $theme
  * @return void
  */
-function handleDbIssue($theme) {
+function handleDbIssue() {
 	$w = new Workflows('com.vdesabou.nike.plus');
 	$w->result(uniqid(), '', 'There is a problem with the library, try to update it.', 'Select Update library below', './images/warning.png', 'no', null, '');
 
@@ -890,7 +986,7 @@ function handleDbIssue($theme) {
  * @param mixed $dbhandle
  * @return void
  */
-function handleDbIssuePdo($theme,$dbhandle) {
+function handleDbIssuePdo($dbhandle) {
 	$w = new Workflows('com.vdesabou.nike.plus');
 	$w->result(uniqid(), '', 'Database Error: ' . $dbhandle->errorInfo()[0] . ' ' . $dbhandle->errorInfo()[1] . ' ' . $dbhandle->errorInfo()[2], '', './images/warning.png', 'no', null, '');
 	$w->result(uniqid(), '', 'There is a problem with the library, try to update it.', 'Select Update library below', './images/warning.png', 'no', null, '');

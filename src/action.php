@@ -20,6 +20,30 @@ $other_action = $arg[0];
 $url = $arg[1];
 
 
+/*
+require_once('./src/alfrednikeplus.php');
+date_default_timezone_set('UTC');
+	$username = exec("Authenticate.app/Contents/MacOS/Authenticate -get username");
+	
+	$password = exec("Authenticate.app/Contents/MacOS/Authenticate -get password");
+		
+	$n = new AlfredNikePlusPHP($username, $password);
+	
+	if($n->userId == "") {
+		// cannot retrieve userId
+		unlink($w->data() . "/update_library_in_progress");
+		displayNotification("ERROR: Login to Nike failed. Check your credentials");
+		return;
+	}
+	
+$my_full_activity = $n->getMyLastFullActivity();
+$json = json_encode($my_full_activity);
+echo "$json";
+
+
+return;
+*/
+
 if ($other_action == "update_library") {
 	if(! $w->internet()) {
 		displayNotificationWithArtwork("Error: No internet connection",'./images/warning.png');
@@ -64,7 +88,7 @@ if ($other_action == "update_library") {
 		$dbsettings = new PDO("sqlite:$dbfile","","",array(PDO::ATTR_PERSISTENT => true));
 		$dbsettings->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	} catch (PDOException $e) {
-		handleDbIssuePdo('new',$dbsettings);
+		handleDbIssuePdo($dbsettings);
 		$dbsettings=null;
 		return;
 	}
