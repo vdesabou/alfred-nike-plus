@@ -236,9 +236,9 @@ if (mb_strlen($query) < 3 ||
 			}			
 		}
 
-		
-		$w->result(uniqid(), '', 'Total Distance: ' . $totalDistance . " " . $unit . " ● Total Runs: " . $lifetime[11] . " ● Total Duration: " . round($lifetime[40]/1000/60/60,0) . " hours", " Average Pace: " . calculatePace($lifetime[40],$lifetime[32],$use_miles) . " min/" . $unit . " ● Average Distance: " . round($totalDistance/$lifetime[11],1) . $unit . " ● Average Fuel: " . round($lifetime[38]/$lifetime[11],0), './images/' . $nikelevel . '.png', 'no', null, '');
-		
+		if($lifetime[11] != 0) {
+			$w->result(uniqid(), '', 'Total Distance: ' . $totalDistance . " " . $unit . " ● Total Runs: " . $lifetime[11] . " ● Total Duration: " . round($lifetime[40]/1000/60/60,0) . " hours", " Average Pace: " . calculatePace($lifetime[40],$lifetime[32],$use_miles) . " min/" . $unit . " ● Average Distance: " . round($totalDistance/$lifetime[11],1) . $unit . " ● Average Fuel: " . round($lifetime[38]/$lifetime[11],0), './images/' . $nikelevel . '.png', 'no', null, '');
+		} 
 		$totalDistanceTreadmill = $use_miles ? round($lifetime[0]* 0.6213711922,0) : round($lifetime[0],0);
 		$totalDistanceBeach = $use_miles ? round($lifetime[1]* 0.6213711922,0) : round($lifetime[1],0);
 		$totalDistanceRoad = $use_miles ? round($lifetime[2]* 0.6213711922,0) : round($lifetime[2],0);
