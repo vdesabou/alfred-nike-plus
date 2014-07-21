@@ -27,17 +27,17 @@ if (file_exists($w->data() . '/update_library_in_progress')) {
 	if (startsWith($words[0],'Init'))
 	{
 		if($elapsed_time < 300) {
-			$w->result(uniqid(), $w->data() . '/update_library_in_progress', 'Initialization phase since ' . beautifyTime($elapsed_time) . ' : ' . floatToSquares(0), 'waiting for Nike Plus web site to return required data', './images/update.png', 'no', null, '');
+			$w->result(null, $w->data() . '/update_library_in_progress', 'Initialization phase since ' . beautifyTime($elapsed_time) . ' : ' . floatToSquares(0), 'waiting for Nike Plus web site to return required data', './images/update.png', 'no', null, '');
 		}
 		else {
-			$w->result(uniqid(), '', 'There is a problem, the initialization phase last more than 5 minutes', 'Follow the steps below:', './images/warning.png', 'no', null, '');
+			$w->result(null, '', 'There is a problem, the initialization phase last more than 5 minutes', 'Follow the steps below:', './images/warning.png', 'no', null, '');
 
-			$w->result(uniqid(), '', "Kill update library", "You can kill it by using nikeplus_kill_update command",  'E1E1B9A5-C03D-4072-B6D7-6F6CBBBC112F.png', 'no', null, '');
+			$w->result(null, '', "Kill update library", "You can kill it by using nikeplus_kill_update command",  'E1E1B9A5-C03D-4072-B6D7-6F6CBBBC112F.png', 'no', null, '');
 
 		}
 	}
 	else {
-		$w->result(uniqid(), $w->data() . '/update_library_in_progress', $words[0] . ' update in progress since ' . beautifyTime($elapsed_time) . ' : '  . floatToSquares(intval($words[1]) / intval($words[2])), $words[1] . '/' . $words[2] . ' activities processed so far (if no progress, use spot_mini_kill_update command to stop it)', './images/update.png', 'no', null, '');
+		$w->result(null, $w->data() . '/update_library_in_progress', $words[0] . ' update in progress since ' . beautifyTime($elapsed_time) . ' : '  . floatToSquares(intval($words[1]) / intval($words[2])), $words[1] . '/' . $words[2] . ' activities processed so far (if no progress, use spot_mini_kill_update command to stop it)', './images/update.png', 'no', null, '');
 	}
 
 	echo $w->toxml();
@@ -100,7 +100,7 @@ if (!file_exists($w->data() . '/settings.db')) {
 
 		$stmt = $dbsettings->prepare($getSettings);
 
-		$w->result(uniqid(), '', 'Settings have been reset to default values', 'Please invoke again the workflow now to enjoy the Nike Plus workflow', './images/warning.png', 'no', null, '');
+		$w->result(null, '', 'Settings have been reset to default values', 'Please invoke again the workflow now to enjoy the Nike Plus workflow', './images/warning.png', 'no', null, '');
 		echo $w->toxml();
 		return;
 
@@ -149,16 +149,16 @@ if (file_exists($w->data() . '/library.db')) {
 
 }
 else {
-	$w->result(uniqid(), '', 'Workflow is not configured', '', './images/warning.png', 'no', null, '');
+	$w->result(null, '', 'Workflow is not configured', '', './images/warning.png', 'no', null, '');
 	
 	$username = exec("Authenticate.app/Contents/MacOS/Authenticate -get username");
 	if($username == "") {
-		$w->result(uniqid(), serialize(array('credentials' /*other_action*/ ,'' /* url */)), "Set you Nike Plus credentials", "Your password will be stored safely in your keychain", '', 'yes', null, '');
+		$w->result(null, serialize(array('credentials' /*other_action*/ ,'' /* url */)), "Set you Nike Plus credentials", "Your password will be stored safely in your keychain", '', 'yes', null, '');
 		echo $w->toxml();		
 	}
 
 	if (!file_exists($w->data() . '/library.db')) {
-		$w->result(uniqid(), serialize(array('update_library' /*other_action*/ ,'' /* url */)), 'Install library', "when done you'll receive a notification. you can check progress by invoking the workflow again", './images/update.png', 'yes', null, '');
+		$w->result(null, serialize(array('update_library' /*other_action*/ ,'' /* url */)), 'Install library', "when done you'll receive a notification. you can check progress by invoking the workflow again", './images/update.png', 'yes', null, '');
 		echo $w->toxml();
 	}
 	return;
@@ -167,8 +167,8 @@ else {
 $check_results = checkForUpdate($w,$last_check_update_time,$dbsettings);
 if($check_results != null && is_array($check_results))
 {
-	$w->result(uniqid(), '', 'New version ' . $check_results[0] . ' is available', $check_results[2], './images/' . $theme . '/' . 'info.png', 'no', null, '');
-	$w->result(uniqid(), '', 'Please install the new version in Downloads directory', $check_results[1], 'fileicon:'.$check_results[1], 'no', null, '' );
+	$w->result(null, '', 'New version ' . $check_results[0] . ' is available', $check_results[2], './images/' . $theme . '/' . 'info.png', 'no', null, '');
+	$w->result(null, '', 'Please install the new version in Downloads directory', $check_results[1], 'fileicon:'.$check_results[1], 'no', null, '' );
 
 	echo $w->toxml();
 	return;
@@ -237,7 +237,7 @@ if (mb_strlen($query) < 3 ||
 		}
 
 		if($lifetime[11] != 0) {
-			$w->result(uniqid(), '', 'Total Distance: ' . $totalDistance . " " . $unit . " ● Total Runs: " . $lifetime[11] . " ● Total Duration: " . round($lifetime[40]/1000/60/60,0) . " hours", " Average Pace: " . calculatePace($lifetime[40],$lifetime[32],$use_miles) . " min/" . $unit . " ● Average Distance: " . round($totalDistance/$lifetime[11],1) . $unit . " ● Average Fuel: " . round($lifetime[38]/$lifetime[11],0), './images/' . $nikelevel . '.png', 'no', null, '');
+			$w->result(null, '', 'Total Distance: ' . $totalDistance . " " . $unit . " ● Total Runs: " . $lifetime[11] . " ● Total Duration: " . round($lifetime[40]/1000/60/60,0) . " hours", " Average Pace: " . calculatePace($lifetime[40],$lifetime[32],$use_miles) . " min/" . $unit . " ● Average Distance: " . round($totalDistance/$lifetime[11],1) . $unit . " ● Average Fuel: " . round($lifetime[38]/$lifetime[11],0), './images/' . $nikelevel . '.png', 'no', null, '');
 		} 
 		$totalDistanceTreadmill = $use_miles ? round($lifetime[0]* 0.6213711922,0) : round($lifetime[0],0);
 		$totalDistanceBeach = $use_miles ? round($lifetime[1]* 0.6213711922,0) : round($lifetime[1],0);
@@ -256,7 +256,7 @@ if (mb_strlen($query) < 3 ||
 		}
 
 			
-		$w->result(uniqid(), serialize(array('' /*other_action*/ ,'https://secure-nikeplus.nike.com/plus/activity/running/' . $username . '/lifetime' /* url */)), 'Road: ' . $totalDistanceRoad . " " . $unit . " ● Beach: " . $totalDistanceBeach . " " . $unit . " ● Trendmill: " . $totalDistanceTreadmill . " " . $unit . " ● Trail: " . $totalDistanceTrail . " " . $unit, 'Morning: ' . round($lifetime[59],0) . " % ● Afternoon: " . round($lifetime[57],0) . " % ● Evening: " . round($lifetime[56],0) . " % ● Night: " . round($lifetime[58],0) . " %", './images/' . $terrain . '.png', 'yes', null, '');
+		$w->result(null, serialize(array('' /*other_action*/ ,'https://secure-nikeplus.nike.com/plus/activity/running/' . $username . '/lifetime' /* url */)), 'Road: ' . $totalDistanceRoad . " " . $unit . " ● Beach: " . $totalDistanceBeach . " " . $unit . " ● Trendmill: " . $totalDistanceTreadmill . " " . $unit . " ● Trail: " . $totalDistanceTrail . " " . $unit, 'Morning: ' . round($lifetime[59],0) . " % ● Afternoon: " . round($lifetime[57],0) . " % ● Evening: " . round($lifetime[56],0) . " % ● Night: " . round($lifetime[58],0) . " %", './images/' . $terrain . '.png', 'yes', null, '');
 		
 		$title="";
 		if(!$use_miles) {
@@ -303,16 +303,16 @@ if (mb_strlen($query) < 3 ||
 			$subtitle = $subtitle . " ● Most Calories: " . $lifetime[48];
 			
 		}
-		$w->result(uniqid(), serialize(array('' /*other_action*/ ,'https://secure-nikeplus.nike.com/plus/profile/' . $username /* url */)),$title,$subtitle, './images/trophee.png', 'yes', null, '');		
+		$w->result(null, serialize(array('' /*other_action*/ ,'https://secure-nikeplus.nike.com/plus/profile/' . $username /* url */)),$title,$subtitle, './images/trophee.png', 'yes', null, '');		
 				
-		$w->result(uniqid(), '', 'Browse your activities for ' . getMonthName(intval(date("m"))), 'Browse current month', './images/' . date("m") . '.png', 'no', null, 'Year▹' . date("Y") . '▹' . date("m") . '▹' );
+		$w->result(null, '', 'Browse your activities for ' . getMonthName(intval(date("m"))), 'Browse current month', './images/' . date("m") . '.png', 'no', null, 'Year▹' . date("Y") . '▹' . date("m") . '▹' );
 		
-		$w->result(uniqid(), '', 'Browse all your runs', 'Browse by year and then by month', './images/' . date("Y") . '.png', 'no', null, 'Year▹');
+		$w->result(null, '', 'Browse all your runs', 'Browse by year and then by month', './images/' . date("Y") . '.png', 'no', null, 'Year▹');
 		
-		$w->result(uniqid(), '', 'Get your shoes stats', 'Browse all your shoes', './images/shoes.png', 'no', null, 'Shoes▹');
+		$w->result(null, '', 'Get your shoes stats', 'Browse all your shoes', './images/shoes.png', 'no', null, 'Shoes▹');
 		
 
-		$w->result(uniqid(), '', 'Settings', 'Search scope=<all>, Max results=<' . $max_results . '>, Spotifious is <' . $spotifious_state . '>, Alfred Playlist is <' . $alfred_playlist_state . '>', './images/credentials.png', 'no', null, 'Settings▹');		
+		$w->result(null, '', 'Settings', 'Search scope=<all>, Max results=<' . $max_results . '>, Spotifious is <' . $spotifious_state . '>, Alfred Playlist is <' . $alfred_playlist_state . '>', './images/credentials.png', 'no', null, 'Settings▹');		
 		
 	}
 	//
@@ -320,14 +320,14 @@ if (mb_strlen($query) < 3 ||
 	//
 	elseif (substr_count($query, '▹') == 1) {
 
-		$w->result(uniqid(), serialize(array('get_latest_activities' /*other_action*/ ,'' /* url */)), 'Update Library (get up to last 5 activities)', "When done you'll receive a notification. you can check progress by invoking the workflow again", './images/update.png', 'yes', null, '');
+		$w->result(null, serialize(array('get_latest_activities' /*other_action*/ ,'' /* url */)), 'Update Library (get up to last 5 activities)', "When done you'll receive a notification. you can check progress by invoking the workflow again", './images/update.png', 'yes', null, '');
 		
-		$w->result(uniqid(), serialize(array('update_library' /*other_action*/ ,'' /* url */)), 'Reset Library (delete and recreate your entire library)', "When done you'll receive a notification. you can check progress by invoking the workflow again", './images/update.png', 'yes', null, '');
+		$w->result(null, serialize(array('update_library' /*other_action*/ ,'' /* url */)), 'Reset Library (delete and recreate your entire library)', "When done you'll receive a notification. you can check progress by invoking the workflow again", './images/update.png', 'yes', null, '');
 
-		$w->result(uniqid(), serialize(array('credentials' /*other_action*/ ,'' /* url */)), 'Change your Nike Plus credentials', "Your password will be stored safely in your keychain", './images/credentials.png', 'yes', null, '');
+		$w->result(null, serialize(array('credentials' /*other_action*/ ,'' /* url */)), 'Change your Nike Plus credentials', "Your password will be stored safely in your keychain", './images/credentials.png', 'yes', null, '');
 		
 		if ($use_miles == true) {
-			$w->result(uniqid(), serialize(array('disable_use_miles' /*other_action*/ ,'' /* url */)), "Disable use of Miles", array(
+			$w->result(null, serialize(array('disable_use_miles' /*other_action*/ ,'' /* url */)), "Disable use of Miles", array(
 					"Use KM instead of Miles",
 					'alt' => 'Not Available',
 					'cmd' => 'Not Available',
@@ -335,7 +335,7 @@ if (mb_strlen($query) < 3 ||
 					'fn' => 'Not Available',
 					'ctrl' => 'Not Available'), './images/uncheck.png', 'yes', null, '');
 		} else {
-			$w->result(uniqid(), serialize(array('enable_use_miles' /*other_action*/ ,'' /* url */)), "Enable use of Miles", array(
+			$w->result(null, serialize(array('enable_use_miles' /*other_action*/ ,'' /* url */)), "Enable use of Miles", array(
 					"Use Miles instead of KM",
 					'alt' => 'Not Available',
 					'cmd' => 'Not Available',
@@ -344,7 +344,7 @@ if (mb_strlen($query) < 3 ||
 					'ctrl' => 'Not Available'), './images/check.png', 'yes', null, '');
 		}
 		
-		$w->result(uniqid(), serialize(array('check_for_update' /*other_action*/ ,'' /* url */)), 'Check for workflow update', array(
+		$w->result(null, serialize(array('check_for_update' /*other_action*/ ,'' /* url */)), 'Check for workflow update', array(
 				"Note this is automatically done otherwise once per day",
 				'alt' => 'Not Available',
 				'cmd' => 'Not Available',
@@ -363,15 +363,15 @@ if (mb_strlen($query) < 3 ||
 		// Search categories for fast access
 		//
 		if (strpos(strtolower('playlists'), strtolower($query)) !== false) {
-			$w->result(uniqid(), '', 'Playlists', 'Browse by playlist', './images/' . $theme . '/' . 'playlists.png', 'no', null, 'Playlist▹');
+			$w->result(null, '', 'Playlists', 'Browse by playlist', './images/' . $theme . '/' . 'playlists.png', 'no', null, 'Playlist▹');
 		} else if (strpos(strtolower('albums'), strtolower($query)) !== false) {
-				$w->result(uniqid(), '', 'Albums', 'Browse by album', './images/' . $theme . '/' . 'albums.png', 'no', null, 'Album▹');
+				$w->result(null, '', 'Albums', 'Browse by album', './images/' . $theme . '/' . 'albums.png', 'no', null, 'Album▹');
 			} else if (strpos(strtolower('artists'), strtolower($query)) !== false) {
-				$w->result(uniqid(), '', 'Artists', 'Browse by artist', './images/' . $theme . '/' . 'artists.png', 'no', null, 'Artist▹');
+				$w->result(null, '', 'Artists', 'Browse by artist', './images/' . $theme . '/' . 'artists.png', 'no', null, 'Artist▹');
 			} else if (strpos(strtolower('alfred'), strtolower($query)) !== false) {
-				$w->result(uniqid(), '', 'Alfred Playlist (currently set to <' . $alfred_playlist_name . '>)' , 'Choose one of your playlists and add tracks, album, playlist to it directly from the workflow', './images/' . $theme . '/' . 'alfred_playlist.png', 'no', null, 'Alfred Playlist▹');
+				$w->result(null, '', 'Alfred Playlist (currently set to <' . $alfred_playlist_name . '>)' , 'Choose one of your playlists and add tracks, album, playlist to it directly from the workflow', './images/' . $theme . '/' . 'alfred_playlist.png', 'no', null, 'Alfred Playlist▹');
 			} else if (strpos(strtolower('settings'), strtolower($query)) !== false) {
-				$w->result(uniqid(), '', 'Settings', 'Go to settings', './images/' . $theme . '/' . 'settings.png', 'no', null, 'Settings▹');
+				$w->result(null, '', 'Settings', 'Go to settings', './images/' . $theme . '/' . 'settings.png', 'no', null, 'Settings▹');
 			}
 
 	} ////////////
@@ -436,12 +436,12 @@ if (mb_strlen($query) < 3 ||
 					$total_calories+=$activity[28];
 				}
 				$distance = $use_miles ? round($total_distance* 0.6213711922,2) : round($total_distance,2);
-				$w->result(uniqid(), '', "Runs: " . $total_activities  . " ● Distance: " . $distance . " " . $unit . " ● Average Pace: " . calculatePace($total_duration,$total_distance,$use_miles) . " min/" . $unit . "", "Fuel: " . $total_fuel . " ● Calories: " . $total_calories, './images/' . $activityByYear[0] . '.png', 'no', null, "Year▹" . $activityByYear[0] . "▹");
+				$w->result(null, '', "Runs: " . $total_activities  . " ● Distance: " . $distance . " " . $unit . " ● Average Pace: " . calculatePace($total_duration,$total_distance,$use_miles) . " min/" . $unit . "", "Fuel: " . $total_fuel . " ● Calories: " . $total_calories, './images/' . $activityByYear[0] . '.png', 'no', null, "Year▹" . $activityByYear[0] . "▹");
 				
 			}
 	
 			if($noresult) {
-				$w->result(uniqid(), 'help', "There is no result. Go for a run man!", "", './images/warning.png', 'no', null, '');
+				$w->result(null, 'help', "There is no result. Go for a run man!", "", './images/warning.png', 'no', null, '');
 			}
 		} else if ($kind == "Shoes") {
 
@@ -468,12 +468,12 @@ if (mb_strlen($query) < 3 ||
 				
 				$distance = $use_miles ? round($shoe[1]* 0.6213711922,2) : round($shoe[1],2);
 				$retired = $shoe[3] ? "true" : "false";
-				$w->result(uniqid(), '', $shoe[0]  . " ● Distance: " . $distance . " " . $unit . " ● Runs: " . $shoe[2], "Retired: " . $retired, './images/shoes.png', 'no', null, '');
+				$w->result(null, '', $shoe[0]  . " ● Distance: " . $distance . " " . $unit . " ● Runs: " . $shoe[2], "Retired: " . $retired, './images/shoes.png', 'no', null, '');
 				
 			}
 	
 			if($noresult) {
-				$w->result(uniqid(), 'help', "There is no result. Go for a run man!", "", './images/warning.png', 'no', null, '');
+				$w->result(null, 'help', "There is no result. Go for a run man!", "", './images/warning.png', 'no', null, '');
 			}
 		}
 	} 
@@ -544,7 +544,7 @@ if (mb_strlen($query) < 3 ||
 				$total_calories+=$activity[28];
 			}
 			$distance = $use_miles ? round($total_distance* 0.6213711922,2) : round($total_distance,2);
-			$w->result(uniqid(), '', "TOTAL 🏃 Runs: " . $total_activities  . " ● Distance: " . $distance . " " . $unit . " ● Average Pace: " . calculatePace($total_duration,$total_distance,$use_miles) . " min/" . $unit . "", "Fuel: " . $total_fuel . " ● Calories: " . $total_calories, './images/' . $year . '.png', 'no', null, "Year▹" . $activityByYear[0] . "▹");
+			$w->result(null, '', "TOTAL 🏃 Runs: " . $total_activities  . " ● Distance: " . $distance . " " . $unit . " ● Average Pace: " . calculatePace($total_duration,$total_distance,$use_miles) . " min/" . $unit . "", "Fuel: " . $total_fuel . " ● Calories: " . $total_calories, './images/' . $year . '.png', 'no', null, "Year▹" . $activityByYear[0] . "▹");
 	
 			// display all months
 			$noresult=true;
@@ -583,12 +583,12 @@ if (mb_strlen($query) < 3 ||
 				}			
 	
 				$distance = $use_miles ? round($total_distance* 0.6213711922,2) : round($total_distance,2);
-				$w->result(uniqid(), '', "Runs: " . $total_activities  . " ● Distance: " . $distance . " " . $unit . " ● Average Pace: " . calculatePace($total_duration,$total_distance,$use_miles) . " min/" . $unit . "", "Fuel: " . $total_fuel . " ● Calories: " . $total_calories, './images/' . $activityByMonth[0] . '.png', 'no', null, "Year▹" . $year . "▹" . $activityByMonth[0] . "▹");
+				$w->result(null, '', "Runs: " . $total_activities  . " ● Distance: " . $distance . " " . $unit . " ● Average Pace: " . calculatePace($total_duration,$total_distance,$use_miles) . " min/" . $unit . "", "Fuel: " . $total_fuel . " ● Calories: " . $total_calories, './images/' . $activityByMonth[0] . '.png', 'no', null, "Year▹" . $year . "▹" . $activityByMonth[0] . "▹");
 	
 			}
 	
 			if($noresult) {
-				$w->result(uniqid(), 'help', "There is no result. Go for a run man!", "", './images/warning.png', 'no', null, '');
+				$w->result(null, 'help', "There is no result. Go for a run man!", "", './images/warning.png', 'no', null, '');
 			}
 
 		} // end of years
@@ -662,7 +662,7 @@ if (mb_strlen($query) < 3 ||
 			}			
 
 			$distance = $use_miles ? round($total_distance* 0.6213711922,2) : round($total_distance,2);
-			$w->result(uniqid(), '', "TOTAL 🏃 Runs: " . $total_activities  . " ● Distance: " . $distance . " " . $unit . " ● Average Pace: " . calculatePace($total_duration,$total_distance,$use_miles) . " min/" . $unit . "", "Fuel: " . $total_fuel . " ● Calories: " . $total_calories, './images/' . $month . '.png', 'no', null, "Year▹" . $year . "▹" . $activityByMonth[0] . "▹");
+			$w->result(null, '', "TOTAL 🏃 Runs: " . $total_activities  . " ● Distance: " . $distance . " " . $unit . " ● Average Pace: " . calculatePace($total_duration,$total_distance,$use_miles) . " min/" . $unit . "", "Fuel: " . $total_fuel . " ● Calories: " . $total_calories, './images/' . $month . '.png', 'no', null, "Year▹" . $year . "▹" . $activityByMonth[0] . "▹");
 			
 			// display all activities
 			$noresult=true;
@@ -728,11 +728,11 @@ if (mb_strlen($query) < 3 ||
 				$tilte = $title . " ● Distance: " . $distance . " " . $unit . " ● Average Pace: " . calculatePace($activity[29],$activity[24],$use_miles) . " min/" . $unit . "";
 
 	
-				$w->result(uniqid(), serialize(array('' /*other_action*/ ,'https://secure-nikeplus.nike.com/plus/activity/running/' . $username . '/detail/' . $activity[0] /* url */)),$tilte,$subtitle, './images/' . $activity[17] . '.png', 'yes', null, '');
+				$w->result(null, serialize(array('' /*other_action*/ ,'https://secure-nikeplus.nike.com/plus/activity/running/' . $username . '/detail/' . $activity[0] /* url */)),$tilte,$subtitle, './images/' . $activity[17] . '.png', 'yes', null, '');
 			}
 	
 			if($noresult) {
-				$w->result(uniqid(), 'help', "There is no result for your search", "", './images/warning.png', 'no', null, '');
+				$w->result(null, 'help', "There is no result for your search", "", './images/warning.png', 'no', null, '');
 			}
 		}
 	}
