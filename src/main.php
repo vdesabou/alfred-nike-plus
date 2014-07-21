@@ -450,7 +450,7 @@ if (mb_strlen($query) < 3 ||
 				//
 				try {
 
-					$getShoes = "select shoes_name,shoes_distance,shoes_activityCount,shoes_retired,shoes_percentage from activities group by shoes_name order by shoes_distance desc";
+					$getShoes = "select shoes_name,shoes_distance,shoes_activityCount,shoes_retired,shoes_percentage from activities where shoes_activityCount!= 0 group by shoes_name order by shoes_activityCount desc";
 
 					$stmt = $db->prepare($getShoes);
 					$stmt->execute();
