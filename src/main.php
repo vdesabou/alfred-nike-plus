@@ -346,7 +346,7 @@ if (mb_strlen($query) < 3 ||
 		$w->result(null, '', 'Get your shoes stats', 'Browse all your shoes', './images/shoes.png', 'no', null, 'Shoes▹');
 
 
-		$w->result(null, '', 'Settings', 'Search scope=<all>, Max results=<' . $max_results . '>, Spotifious is <' . $spotifious_state . '>, Alfred Playlist is <' . $alfred_playlist_state . '>', './images/credentials.png', 'no', null, 'Settings▹');
+		$w->result(null, '', 'Go to settings', 'Units=<' . $unit . '>' . ' User=<' . $username . '>', './images/credentials.png', 'no', null, 'Settings▹');
 
 	}
 	//
