@@ -206,40 +206,72 @@ if (mb_strlen($query) < 3 ||
 		if(!$use_miles) {
 			if($lifetime[32] < 50 ) {
 				$nikelevel='yellow';
+				$nextlevel='orange';
+				$nextlevelremaining=round(50-$lifetime[32],0);
 			}else if($lifetime[32] < 250 ) {
-					$nikelevel='orange';
-				}else if($lifetime[32] < 1000 ) {
-					$nikelevel='green';
-				}else if($lifetime[32] < 2500 ) {
-					$nikelevel='blue';
-				}else if($lifetime[32] < 5000 ) {
-					$nikelevel='purple';
-				}else if($lifetime[32] < 15000 ) {
-					$nikelevel='black';
-				}else {
+				$nikelevel='orange';
+				$nextlevel='green';
+				$nextlevelremaining=round(250-$lifetime[32],0);
+			}else if($lifetime[32] < 1000 ) {
+				$nikelevel='green';
+				$nextlevel='blue';
+				$nextlevelremaining=round(1000-$lifetime[32],0);
+			}else if($lifetime[32] < 2500 ) {
+				$nikelevel='blue';
+				$nextlevel='purple';
+				$nextlevelremaining=round(2500-$lifetime[32],0);
+			}else if($lifetime[32] < 5000 ) {
+				$nikelevel='purple';
+				$nextlevel='black';
+				$nextlevelremaining=round(5000-$lifetime[32],0);
+			}else if($lifetime[32] < 15000 ) {
+				$nikelevel='black';
+				$nextlevel='volte';
+				$nextlevelremaining=round(15000-$lifetime[32],0);
+			}else {
 				$nikelevel='volte';
 			}
 		}
 		else {
-			if($lifetime[32] < 50 * 0.6213711922 ) {
+			if($lifetime[32]* 0.6213711922 < 30 ) {
 				$nikelevel='yellow';
-			}else if($lifetime[32] < 250* 0.6213711922 ) {
-					$nikelevel='orange';
-				}else if($lifetime[32] < 1000* 0.6213711922 ) {
-					$nikelevel='green';
-				}else if($lifetime[32] < 2500* 0.6213711922 ) {
-					$nikelevel='blue';
-				}else if($lifetime[32] < 5000* 0.6213711922 ) {
-					$nikelevel='purple';
-				}else if($lifetime[32] < 15000* 0.6213711922 ) {
-					$nikelevel='black';
-				}else {
+				$nextlevel='orange';
+				$nextlevelremaining=round(30-$lifetime[32]* 0.6213711922,0);	
+			}else if($lifetime[32]* 0.6213711922 < 155 ) {
+				$nikelevel='orange';
+				$nextlevel='green';
+				$nextlevelremaining=round(155-$lifetime[32]* 0.6213711922,0);
+			}else if($lifetime[32]* 0.6213711922 < 620 ) {
+				$nikelevel='green';
+				$nextlevel='blue';
+				$nextlevelremaining=round(620-$lifetime[32]* 0.6213711922,0);
+			}else if($lifetime[32]* 0.6213711922 < 1552 ) {
+				$nikelevel='blue';
+				$nextlevel='purple';
+				$nextlevelremaining=round(1552-$lifetime[32]* 0.6213711922,0);
+			}else if($lifetime[32]* 0.6213711922 < 3106) {
+				$nikelevel='purple';
+				$nextlevel='black';
+				$nextlevelremaining=round(3106-$lifetime[32]* 0.6213711922,0);
+			}else if($lifetime[32]* 0.6213711922 < 9320 ) {
+				$nikelevel='black';
+				$nextlevel='volte';
+				$nextlevelremaining=round(9320-$lifetime[32]* 0.6213711922,0);
+			}else {
 				$nikelevel='volte';
 			}
 		}
 
+		if($nextlevel != "") {
+						
+			$nextleveltext = " ● Next level (";
+			$nextleveltext = $nextleveltext . $nextlevel;
+			$nextleveltext = $nextleveltext . "): ";
+			$nextleveltext = $nextleveltext . $nextlevelremaining;
+			$nextleveltext = $nextleveltext . $unit;
+		}
 		if($lifetime[11] != 0) {
-			$w->result(null, '', 'Total Distance: ' . $totalDistance . " " . $unit . " ● Total Runs: " . $lifetime[11] . " ● Total Duration: " . round($lifetime[40]/1000/60/60,0) . " hours", " Average Pace: " . calculatePace($lifetime[40],$lifetime[32],$use_miles) . " min/" . $unit . " ● Average Distance: " . round($totalDistance/$lifetime[11],1) . $unit . " ● Average Fuel: " . round($lifetime[38]/$lifetime[11],0), './images/' . $nikelevel . '.png', 'no', null, '');
+			$w->result(null, '', 'Total Distance: ' . $totalDistance . " " . $unit . " ● Total Runs: " . $lifetime[11] . " ● Total Duration: " . round($lifetime[40]/1000/60/60,0) . " hours", " Average Pace: " . calculatePace($lifetime[40],$lifetime[32],$use_miles) . " min/" . $unit . " ● Average Distance: " . round($totalDistance/$lifetime[11],1) . $unit . " ● Average Fuel: " . round($lifetime[38]/$lifetime[11],0) . " " . $nextleveltext, './images/' . $nikelevel . '.png', 'no', null, '');
 		}
 		$totalDistanceTreadmill = $use_miles ? round($lifetime[0]* 0.6213711922,0) : round($lifetime[0],0);
 		$totalDistanceBeach = $use_miles ? round($lifetime[1]* 0.6213711922,0) : round($lifetime[1],0);
