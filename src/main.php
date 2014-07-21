@@ -309,6 +309,8 @@ if (mb_strlen($query) < 3 ||
 		
 		$w->result(uniqid(), '', 'Browse all your runs', 'Browse by year and then by month', './images/' . date("Y") . '.png', 'no', null, 'Year▹');
 		
+		$w->result(uniqid(), '', 'Get your shoes stats', 'Browse all your shoes', './images/shoes.png', 'no', null, 'Shoes▹');
+		
 
 		$w->result(uniqid(), '', 'Settings', 'Search scope=<all>, Max results=<' . $max_results . '>, Spotifious is <' . $spotifious_state . '>, Alfred Playlist is <' . $alfred_playlist_state . '>', './images/credentials.png', 'no', null, 'Settings▹');		
 		
@@ -441,8 +443,38 @@ if (mb_strlen($query) < 3 ||
 			if($noresult) {
 				$w->result(uniqid(), 'help', "There is no result. Go for a run man!", "", './images/warning.png', 'no', null, '');
 			}
+		} else if ($kind == "Shoes") {
 
-
+			//
+			// Browse by shoes
+			//
+			try {
+	
+				$getShoes = "select shoes_name,shoes_distance,shoes_activityCount,shoes_retired,shoes_percentage from activities group by shoes_name order by shoes_distance desc";
+	
+				$stmt = $db->prepare($getShoes);
+				$stmt->execute();
+	
+			} catch (PDOException $e) {
+				handleDbIssuePdo($db);
+				return;
+			}
+	
+			// display all shoes
+			$noresult=true;
+			while ($shoe = $stmt->fetch()) {
+	
+				$noresult=false;
+				
+				$distance = $use_miles ? round($shoe[1]* 0.6213711922,2) : round($shoe[1],2);
+				$retired = $shoe[3] ? "true" : "false";
+				$w->result(uniqid(), '', $shoe[0]  . " ● Distance: " . $distance . " " . $unit . " ● Runs: " . $shoe[2], "Retired: " . $retired, './images/shoes.png', 'no', null, '');
+				
+			}
+	
+			if($noresult) {
+				$w->result(uniqid(), 'help', "There is no result. Go for a run man!", "", './images/warning.png', 'no', null, '');
+			}
 		}
 	} 
 	////////////
