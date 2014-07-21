@@ -149,12 +149,14 @@ if (file_exists($w->data() . '/library.db')) {
 
 }
 else {
-	$w->result(null, '', 'Workflow is not configured', '', './images/warning.png', 'no', null, '');
+	$w->result(null, '', 'Workflow is not configured', 'Set (or change your Nike Plus credentials and then select install library', './images/warning.png', 'no', null, '');
 
 	$username = exec("Authenticate.app/Contents/MacOS/Authenticate -get username");
 	if($username == "") {
-		$w->result(null, serialize(array('credentials' /*other_action*/ ,'' /* url */)), "Set you Nike Plus credentials", "Your password will be stored safely in your keychain", '', 'yes', null, '');
+		$w->result(null, serialize(array('credentials' /*other_action*/ ,'' /* url */)), "Set your Nike Plus credentials", "Your password will be stored safely in your keychain", '', 'yes', null, '');
 		echo $w->toxml();
+	} else {
+		$w->result(null, serialize(array('credentials' /*other_action*/ ,'' /* url */)), "Change your Nike Plus credentials", "Your password will be stored safely in your keychain", '', 'yes', null, '');		
 	}
 
 	if (!file_exists($w->data() . '/library.db')) {
