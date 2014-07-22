@@ -8,11 +8,44 @@
 	<string>Tools</string>
 	<key>connections</key>
 	<dict>
+		<key>086D0AEB-626F-4B41-A068-BCE379A395AE</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>44D26142-A7F4-4083-B637-93A64885907E</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+			</dict>
+		</array>
+		<key>44D26142-A7F4-4083-B637-93A64885907E</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>3B650C5A-903B-4361-B88A-9CC2C6CAA930</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+			</dict>
+		</array>
 		<key>61B572CA-BEE7-4A11-8164-0280F9510AB9</key>
 		<array>
 			<dict>
 				<key>destinationuid</key>
 				<string>C06E7DD4-5324-42CE-AB74-84153C854A96</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+			</dict>
+		</array>
+		<key>9C2BC892-315D-4037-9E45-8D03F03262C1</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>086D0AEB-626F-4B41-A068-BCE379A395AE</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -66,6 +99,23 @@
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>escaping</key>
+				<integer>38</integer>
+				<key>script</key>
+				<string>php -f ./src/action.php -- "{query}"</string>
+				<key>type</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>C06E7DD4-5324-42CE-AB74-84153C854A96</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
 				<key>argumenttype</key>
 				<integer>2</integer>
 				<key>escaping</key>
@@ -93,19 +143,10 @@
 			<integer>0</integer>
 		</dict>
 		<dict>
-			<key>config</key>
-			<dict>
-				<key>escaping</key>
-				<integer>38</integer>
-				<key>script</key>
-				<string>php -f ./src/action.php -- "{query}"</string>
-				<key>type</key>
-				<integer>0</integer>
-			</dict>
 			<key>type</key>
-			<string>alfred.workflow.action.script</string>
+			<string>alfred.workflow.output.largetype</string>
 			<key>uid</key>
-			<string>C06E7DD4-5324-42CE-AB74-84153C854A96</string>
+			<string>018A9B7C-C16D-45FF-A637-D16C06A0A3EF</string>
 			<key>version</key>
 			<integer>0</integer>
 		</dict>
@@ -137,10 +178,23 @@
 			<integer>1</integer>
 		</dict>
 		<dict>
+			<key>config</key>
+			<dict>
+				<key>argumenttype</key>
+				<integer>2</integer>
+				<key>keyword</key>
+				<string>nikeplus_kill_update</string>
+				<key>subtext</key>
+				<string>use it if the library update seems stuck</string>
+				<key>text</key>
+				<string>Kill update library</string>
+				<key>withspace</key>
+				<false/>
+			</dict>
 			<key>type</key>
-			<string>alfred.workflow.output.largetype</string>
+			<string>alfred.workflow.input.keyword</string>
 			<key>uid</key>
-			<string>018A9B7C-C16D-45FF-A637-D16C06A0A3EF</string>
+			<string>E1E1B9A5-C03D-4072-B6D7-6F6CBBBC112F</string>
 			<key>version</key>
 			<integer>0</integer>
 		</dict>
@@ -164,21 +218,70 @@
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>escaping</key>
+				<integer>38</integer>
+				<key>script</key>
+				<string>php -f ./src/action.php -- "{query}"</string>
+				<key>type</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.script</string>
+			<key>uid</key>
+			<string>3B650C5A-903B-4361-B88A-9CC2C6CAA930</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
 				<key>argumenttype</key>
 				<integer>2</integer>
 				<key>keyword</key>
-				<string>nikeplus_kill_update</string>
+				<string>nikeplus_get_latest_activities</string>
 				<key>subtext</key>
-				<string>use it if the library update seems stuck</string>
+				<string>Get up to last 5 activities</string>
 				<key>text</key>
-				<string>Kill update library</string>
+				<string>Refresh NikePlus library</string>
 				<key>withspace</key>
 				<false/>
 			</dict>
 			<key>type</key>
 			<string>alfred.workflow.input.keyword</string>
 			<key>uid</key>
-			<string>E1E1B9A5-C03D-4072-B6D7-6F6CBBBC112F</string>
+			<string>086D0AEB-626F-4B41-A068-BCE379A395AE</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>triggerid</key>
+				<string>get_latest_activities</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.trigger.external</string>
+			<key>uid</key>
+			<string>9C2BC892-315D-4037-9E45-8D03F03262C1</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>escaping</key>
+				<integer>38</integer>
+				<key>script</key>
+				<string>$args=serialize(array('get_latest_activities' /*other_action*/ ,'' /* url */));
+
+echo "$args";</string>
+				<key>type</key>
+				<integer>1</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>44D26142-A7F4-4083-B637-93A64885907E</string>
 			<key>version</key>
 			<integer>0</integer>
 		</dict>
@@ -192,15 +295,35 @@
 			<key>ypos</key>
 			<real>10</real>
 		</dict>
+		<key>086D0AEB-626F-4B41-A068-BCE379A395AE</key>
+		<dict>
+			<key>ypos</key>
+			<real>250</real>
+		</dict>
 		<key>1E4FBE4D-F098-48A4-8F97-531E4E0FEB36</key>
 		<dict>
 			<key>ypos</key>
 			<real>130</real>
 		</dict>
+		<key>3B650C5A-903B-4361-B88A-9CC2C6CAA930</key>
+		<dict>
+			<key>ypos</key>
+			<real>250</real>
+		</dict>
+		<key>44D26142-A7F4-4083-B637-93A64885907E</key>
+		<dict>
+			<key>ypos</key>
+			<real>250</real>
+		</dict>
 		<key>61B572CA-BEE7-4A11-8164-0280F9510AB9</key>
 		<dict>
 			<key>ypos</key>
 			<real>10</real>
+		</dict>
+		<key>9C2BC892-315D-4037-9E45-8D03F03262C1</key>
+		<dict>
+			<key>ypos</key>
+			<real>250</real>
 		</dict>
 		<key>9D823CD1-061C-4977-97A4-BD6DA8DA8B4F</key>
 		<dict>
