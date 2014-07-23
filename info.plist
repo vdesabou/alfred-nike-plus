@@ -45,7 +45,7 @@
 		<array>
 			<dict>
 				<key>destinationuid</key>
-				<string>086D0AEB-626F-4B41-A068-BCE379A395AE</string>
+				<string>44D26142-A7F4-4083-B637-93A64885907E</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -218,23 +218,6 @@
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>escaping</key>
-				<integer>38</integer>
-				<key>script</key>
-				<string>php -f ./src/action.php -- "{query}"</string>
-				<key>type</key>
-				<integer>0</integer>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.output.script</string>
-			<key>uid</key>
-			<string>3B650C5A-903B-4361-B88A-9CC2C6CAA930</string>
-			<key>version</key>
-			<integer>0</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
 				<key>argumenttype</key>
 				<integer>2</integer>
 				<key>keyword</key>
@@ -256,19 +239,6 @@
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>triggerid</key>
-				<string>get_latest_activities</string>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.trigger.external</string>
-			<key>uid</key>
-			<string>9C2BC892-315D-4037-9E45-8D03F03262C1</string>
-			<key>version</key>
-			<integer>0</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
 				<key>escaping</key>
 				<integer>38</integer>
 				<key>script</key>
@@ -282,6 +252,36 @@ echo "$args";</string>
 			<string>alfred.workflow.action.script</string>
 			<key>uid</key>
 			<string>44D26142-A7F4-4083-B637-93A64885907E</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>escaping</key>
+				<integer>38</integer>
+				<key>script</key>
+				<string>php -f ./src/action.php -- "{query}"</string>
+				<key>type</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.script</string>
+			<key>uid</key>
+			<string>3B650C5A-903B-4361-B88A-9CC2C6CAA930</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>triggerid</key>
+				<string>get_latest_activities</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.trigger.external</string>
+			<key>uid</key>
+			<string>9C2BC892-315D-4037-9E45-8D03F03262C1</string>
 			<key>version</key>
 			<integer>0</integer>
 		</dict>
@@ -323,7 +323,7 @@ echo "$args";</string>
 		<key>9C2BC892-315D-4037-9E45-8D03F03262C1</key>
 		<dict>
 			<key>ypos</key>
-			<real>250</real>
+			<real>390</real>
 		</dict>
 		<key>9D823CD1-061C-4977-97A4-BD6DA8DA8B4F</key>
 		<dict>
