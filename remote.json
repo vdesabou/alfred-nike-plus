@@ -1,5 +1,5 @@
 {
-    "version": 1.1,
+    "version": 1.11,
     "download_url": "https://raw.githubusercontent.com/packal/repository/master/com.vdesabou.nike.plus/nikeplus.alfredworkflow",
-    "description": "Add a summary of year/month at the top of results -  Added shoes statistics"
+    "description": "Added command nike_get_latest_activities, with external trigger - Added distance until next Nike+ level - Various fixes"
 }
