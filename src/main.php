@@ -475,7 +475,7 @@ if (mb_strlen($query) < 3 ||
 			}
 
 			if($noresult) {
-				$w->result(null, 'help', "There is no result. Go for a run man!", "", './images/warning.png', 'no', null, '');
+				$w->result(null, 'help', "There is no run yet. Go for a run!", "#neverstoprunning #justdoit", './images/warning.png', 'no', null, '');
 			}
 		} else if ($kind == "Shoes") {
 
@@ -507,7 +507,7 @@ if (mb_strlen($query) < 3 ||
 				}
 
 				if($noresult) {
-					$w->result(null, 'help', "There is no result. Go for a run man!", "", './images/warning.png', 'no', null, '');
+					$w->result(null, 'help', "There is no run yet. Go for a run!", "#neverstoprunning #justdoit", './images/warning.png', 'no', null, '');
 				}
 			}
 	}
@@ -622,7 +622,7 @@ if (mb_strlen($query) < 3 ||
 			}
 
 			if($noresult) {
-				$w->result(null, 'help', "There is no result. Go for a run man!", "", './images/warning.png', 'no', null, '');
+				$w->result(null, 'help', "There is no run yet. Go for a run!", "#neverstoprunning #justdoit", './images/warning.png', 'no', null, '');
 			}
 
 		} // end of years
@@ -685,6 +685,7 @@ if (mb_strlen($query) < 3 ||
 			$total_activities=0;
 			$total_fuel=0;
 			$total_calories=0;
+			$noresult=true;
 			while ($activity = $stmt2->fetch()) {
 
 				$noresult=false;
@@ -695,9 +696,11 @@ if (mb_strlen($query) < 3 ||
 				$total_calories+=$activity[28];
 			}
 
-			$distance = $use_miles ? round($total_distance* 0.6213711922,2) : round($total_distance,2);
-			$w->result(null, '', "TOTAL 🏃 Runs: " . $total_activities  . " ● Distance: " . $distance . " " . $unit . " ● Average Pace: " . calculatePace($total_duration,$total_distance,$use_miles) . " min/" . $unit . "", "Fuel: " . $total_fuel . " ● Calories: " . $total_calories, './images/' . $month . '.png', 'no', null, "Year▹" . $year . "▹" . $activityByMonth[0] . "▹");
-
+			if(!$noresult) {
+				$distance = $use_miles ? round($total_distance* 0.6213711922,2) : round($total_distance,2);
+				$w->result(null, '', "TOTAL 🏃 Runs: " . $total_activities  . " ● Distance: " . $distance . " " . $unit . " ● Average Pace: " . calculatePace($total_duration,$total_distance,$use_miles) . " min/" . $unit . "", "Fuel: " . $total_fuel . " ● Calories: " . $total_calories, './images/' . $month . '.png', 'no', null, "Year▹" . $year . "▹" . $activityByMonth[0] . "▹");
+			}
+			
 			// display all activities
 			$noresult=true;
 			while ($activity = $stmt->fetch()) {
@@ -766,7 +769,7 @@ if (mb_strlen($query) < 3 ||
 			}
 
 			if($noresult) {
-				$w->result(null, 'help', "There is no result for your search", "", './images/warning.png', 'no', null, '');
+				$w->result(null, 'help', "There is no run yet. Go for a run!", "#neverstoprunning #justdoit", './images/warning.png', 'no', null, '');
 			}
 		}
 	}
