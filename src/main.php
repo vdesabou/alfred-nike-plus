@@ -37,7 +37,7 @@ if (file_exists($w->data() . '/update_library_in_progress')) {
 		}
 	}
 	else {
-		$w->result(null, $w->data() . '/update_library_in_progress', $words[0] . ' update in progress since ' . beautifyTime($elapsed_time) . ' : '  . floatToSquares(intval($words[1]) / intval($words[2])), $words[1] . '/' . $words[2] . ' activities processed so far (if no progress, use spot_mini_kill_update command to stop it)', './images/update.png', 'no', null, '');
+		$w->result(null, $w->data() . '/update_library_in_progress', $words[0] . ' update in progress since ' . beautifyTime($elapsed_time) . ' : '  . floatToSquares(intval($words[1]) / intval($words[2])), $words[1] . '/' . $words[2] . ' runs processed so far (if no progress, use spot_mini_kill_update command to stop it)', './images/update.png', 'no', null, '');
 	}
 
 	echo $w->toxml();
@@ -339,7 +339,7 @@ if (mb_strlen($query) < 3 ||
 		}
 		$w->result(null, serialize(array('' /*other_action*/ ,'https://secure-nikeplus.nike.com/plus/profile/' . $username /* url */)),$title,$subtitle, './images/trophee.png', 'yes', null, '');
 
-		$w->result(null, '', 'Browse your activities for ' . getMonthName(intval(date("m"))), 'Browse current month', './images/' . date("m") . '.png', 'no', null, 'Year▹' . date("Y") . '▹' . date("m") . '▹' );
+		$w->result(null, '', 'Browse your runs for ' . getMonthName(intval(date("m"))), 'Browse current month', './images/' . date("m") . '.png', 'no', null, 'Year▹' . date("Y") . '▹' . date("m") . '▹' );
 
 		$w->result(null, '', 'Browse all your runs', 'Browse by year and then by month', './images/' . date("Y") . '.png', 'no', null, 'Year▹');
 
@@ -354,7 +354,7 @@ if (mb_strlen($query) < 3 ||
 	//
 	elseif (substr_count($query, '▹') == 1) {
 
-		$w->result(null, serialize(array('get_latest_activities' /*other_action*/ ,'' /* url */)), 'Update Library (get up to last 5 activities)', "When done you'll receive a notification. you can check progress by invoking the workflow again", './images/update.png', 'yes', null, '');
+		$w->result(null, serialize(array('get_latest_activities' /*other_action*/ ,'' /* url */)), 'Update Library (get up to last 5 runs)', "When done you'll receive a notification. you can check progress by invoking the workflow again", './images/update.png', 'yes', null, '');
 
 		$w->result(null, serialize(array('update_library' /*other_action*/ ,'' /* url */)), 'Reset Library (delete and recreate your entire library)', "When done you'll receive a notification. you can check progress by invoking the workflow again", './images/update.png', 'yes', null, '');
 
@@ -470,7 +470,8 @@ if (mb_strlen($query) < 3 ||
 					$total_calories+=$activity[28];
 				}
 				$distance = $use_miles ? round($total_distance* 0.6213711922,2) : round($total_distance,2);
-				$w->result(null, '', "Runs: " . $total_activities  . " ● Distance: " . $distance . " " . $unit . " ● Average Pace: " . calculatePace($total_duration,$total_distance,$use_miles) . " min/" . $unit . "", "Fuel: " . $total_fuel . " ● Calories: " . $total_calories, './images/' . $activityByYear[0] . '.png', 'no', null, "Year▹" . $activityByYear[0] . "▹");
+				$average_distance = round($distance/$total_activities,2); 
+				$w->result(null, '', "Runs: " . $total_activities  . " ● Distance: " . $distance . " " . $unit . " ● Average Pace: " . calculatePace($total_duration,$total_distance,$use_miles) . " min/" . $unit . "", "Fuel: " . $total_fuel . " ● Calories: " . $total_calories . " ● Average Distance: " . $average_distance . " " . $unit, './images/' . $activityByYear[0] . '.png', 'no', null, "Year▹" . $activityByYear[0] . "▹");
 
 			}
 
@@ -578,7 +579,8 @@ if (mb_strlen($query) < 3 ||
 				$total_calories+=$activity[28];
 			}
 			$distance = $use_miles ? round($total_distance* 0.6213711922,2) : round($total_distance,2);
-			$w->result(null, '', "TOTAL 🏃 Runs: " . $total_activities  . " ● Distance: " . $distance . " " . $unit . " ● Average Pace: " . calculatePace($total_duration,$total_distance,$use_miles) . " min/" . $unit . "", "Fuel: " . $total_fuel . " ● Calories: " . $total_calories, './images/' . $year . '.png', 'no', null, "Year▹" . $activityByYear[0] . "▹");
+			$average_distance = round($distance/$total_activities,2);
+			$w->result(null, '', "TOTAL 🏃 Runs: " . $total_activities  . " ● Distance: " . $distance . " " . $unit . " ● Average Pace: " . calculatePace($total_duration,$total_distance,$use_miles) . " min/" . $unit . "", "Fuel: " . $total_fuel . " ● Calories: " . $total_calories . " ● Average Distance: " . $average_distance . " " . $unit, './images/' . $year . '.png', 'no', null, "Year▹" . $activityByYear[0] . "▹");
 
 			// display all months
 			$noresult=true;
@@ -617,7 +619,8 @@ if (mb_strlen($query) < 3 ||
 				}
 
 				$distance = $use_miles ? round($total_distance* 0.6213711922,2) : round($total_distance,2);
-				$w->result(null, '', "Runs: " . $total_activities  . " ● Distance: " . $distance . " " . $unit . " ● Average Pace: " . calculatePace($total_duration,$total_distance,$use_miles) . " min/" . $unit . "", "Fuel: " . $total_fuel . " ● Calories: " . $total_calories, './images/' . $activityByMonth[0] . '.png', 'no', null, "Year▹" . $year . "▹" . $activityByMonth[0] . "▹");
+				$average_distance = round($distance/$total_activities,2);
+				$w->result(null, '', "Runs: " . $total_activities  . " ● Distance: " . $distance . " " . $unit . " ● Average Pace: " . calculatePace($total_duration,$total_distance,$use_miles) . " min/" . $unit . "", "Fuel: " . $total_fuel . " ● Calories: " . $total_calories . " ● Average Distance: " . $average_distance . " " . $unit, './images/' . $activityByMonth[0] . '.png', 'no', null, "Year▹" . $year . "▹" . $activityByMonth[0] . "▹");
 
 			}
 
@@ -698,7 +701,8 @@ if (mb_strlen($query) < 3 ||
 
 			if(!$noresult) {
 				$distance = $use_miles ? round($total_distance* 0.6213711922,2) : round($total_distance,2);
-				$w->result(null, '', "TOTAL 🏃 Runs: " . $total_activities  . " ● Distance: " . $distance . " " . $unit . " ● Average Pace: " . calculatePace($total_duration,$total_distance,$use_miles) . " min/" . $unit . "", "Fuel: " . $total_fuel . " ● Calories: " . $total_calories, './images/' . $month . '.png', 'no', null, "Year▹" . $year . "▹" . $activityByMonth[0] . "▹");
+				$average_distance = round($distance/$total_activities,2);
+				$w->result(null, '', "TOTAL 🏃 Runs: " . $total_activities  . " ● Distance: " . $distance . " " . $unit . " ● Average Pace: " . calculatePace($total_duration,$total_distance,$use_miles) . " min/" . $unit . "", "Fuel: " . $total_fuel . " ● Calories: " . $total_calories . " ● Average Distance: " . $average_distance . " " . $unit, './images/' . $month . '.png', 'no', null, "Year▹" . $year . "▹" . $activityByMonth[0] . "▹");
 			}
 			
 			// display all activities
