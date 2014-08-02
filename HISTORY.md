@@ -1,5 +1,14 @@
 ## History
 
+1.1.2:
+
+* Added Average Distance
+
+* Fixed issue when there is no run for a month
+
+* Use ⌘C and ⌘L to collect your stats in your clipboard or display in large type
+
+
 1.1.1:
 
 * Added command nike_get_latest_activities, with external trigger
