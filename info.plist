@@ -89,11 +89,11 @@
 	<key>createdby</key>
 	<string>vdesabou</string>
 	<key>description</key>
-	<string>Workflow to get all your Nike Plus statistics</string>
+	<string>Workflow to get all your Nike Plus runs</string>
 	<key>disabled</key>
 	<false/>
 	<key>name</key>
-	<string>Nike Plus 1.1.1</string>
+	<string>Nike Plus 1.1.2</string>
 	<key>objects</key>
 	<array>
 		<dict>
@@ -218,27 +218,6 @@
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>argumenttype</key>
-				<integer>2</integer>
-				<key>keyword</key>
-				<string>nikeplus_get_latest_activities</string>
-				<key>subtext</key>
-				<string>Get up to last 5 activities</string>
-				<key>text</key>
-				<string>Refresh NikePlus library</string>
-				<key>withspace</key>
-				<false/>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.input.keyword</string>
-			<key>uid</key>
-			<string>086D0AEB-626F-4B41-A068-BCE379A395AE</string>
-			<key>version</key>
-			<integer>0</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
 				<key>escaping</key>
 				<integer>38</integer>
 				<key>script</key>
@@ -269,6 +248,27 @@ echo "$args";</string>
 			<string>alfred.workflow.output.script</string>
 			<key>uid</key>
 			<string>3B650C5A-903B-4361-B88A-9CC2C6CAA930</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argumenttype</key>
+				<integer>2</integer>
+				<key>keyword</key>
+				<string>nikeplus_get_latest_activities</string>
+				<key>subtext</key>
+				<string>Get up to last 5 activities</string>
+				<key>text</key>
+				<string>Refresh NikePlus library</string>
+				<key>withspace</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.keyword</string>
+			<key>uid</key>
+			<string>086D0AEB-626F-4B41-A068-BCE379A395AE</string>
 			<key>version</key>
 			<integer>0</integer>
 		</dict>
