@@ -603,7 +603,7 @@ if (mb_strlen($query) < 3 ||
 				$title = "TOTAL 🏃 Runs: " . $total_activities  . " ● Distance: " . $distance . " " . $unit . " ● Average Pace: " . calculatePace($total_duration,$total_distance,$use_miles) . " min/" . $unit . "";
 				$subtitle = "Fuel: " . $total_fuel . " ● Calories: " . $total_calories . " ● Average Distance: " . $average_distance . " " . $unit;
 				
-				$copytext = "#nikeplus for " . date("F", strtotime($year . "-" . $month)) . ': ' .$title . "\r" . '(collected by https://github.com/vdesabou/alfred-nike-plus)';
+				$copytext = "#nikeplus for " . date("F", strtotime($year . "-" . $month)) . ': ' .$title . "\r" . '(collected by http://www.packal.org/workflow/nike-plus)';
 			
 				$w->result(null, '', $title, $subtitle, './images/' . $year . '.png', 'no', array('copy' => $copytext, 'largetype' => $copytext), "Year▹" . $year . "▹" . $activityByMonth[0] . "▹");
 			}
