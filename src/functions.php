@@ -164,10 +164,13 @@ function formatDuration($time, $hideZeroHours = true, $hideSeconds = false) {
  * @return float (time)
  */
 function calculatePace($duration, $distance, $toMiles = false) {
+	$pace=0;
 	if($toMiles) {
 		$distance = toMiles($distance);
 	}
-	$pace = $duration / $distance;
+	if($distance!=0) {
+		$pace = $duration / $distance;
+	} 
 	return formatDuration($pace);
 }
 
