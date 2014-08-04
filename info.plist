@@ -127,9 +127,9 @@
 				<key>script</key>
 				<string>php -n -f ./src/main.php -- "{query}"</string>
 				<key>subtext</key>
-				<string>Search in your activities</string>
+				<string>Get the statistics of your Nike+ runs from Alfred</string>
 				<key>title</key>
-				<string>Get your Nike Plus Data</string>
+				<string>Nike Plus Runs</string>
 				<key>type</key>
 				<integer>0</integer>
 				<key>withspace</key>
@@ -221,25 +221,6 @@
 				<key>escaping</key>
 				<integer>38</integer>
 				<key>script</key>
-				<string>$args=serialize(array('get_latest_activities' /*other_action*/ ,'' /* url */));
-
-echo "$args";</string>
-				<key>type</key>
-				<integer>1</integer>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.action.script</string>
-			<key>uid</key>
-			<string>44D26142-A7F4-4083-B637-93A64885907E</string>
-			<key>version</key>
-			<integer>0</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>escaping</key>
-				<integer>38</integer>
-				<key>script</key>
 				<string>php -f ./src/action.php -- "{query}"</string>
 				<key>type</key>
 				<integer>0</integer>
@@ -269,6 +250,25 @@ echo "$args";</string>
 			<string>alfred.workflow.input.keyword</string>
 			<key>uid</key>
 			<string>086D0AEB-626F-4B41-A068-BCE379A395AE</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>escaping</key>
+				<integer>38</integer>
+				<key>script</key>
+				<string>$args=serialize(array('get_latest_activities' /*other_action*/ ,'' /* url */));
+
+echo "$args";</string>
+				<key>type</key>
+				<integer>1</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>44D26142-A7F4-4083-B637-93A64885907E</string>
 			<key>version</key>
 			<integer>0</integer>
 		</dict>
