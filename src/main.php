@@ -809,7 +809,7 @@ if (mb_strlen($query) < 3 ||
 				$tilte = $title . " ● Distance: " . $distance . " " . $unit . " ● Average Pace: " . calculatePace($activity[29],$activity[24],$use_miles) . " min/" . $unit . "";
 				
 				$nikeurl = 'https://secure-nikeplus.nike.com/plus/activity/running/' . $username . '/detail/' . $activity[0];
-				$w->result(null, serialize(array('' /*other_action*/ ,/* url */)),$tilte,$subtitle, './images/' . $activity[17] . '.png', 'yes', array('copy' => 'I ran ' . $distance . " " . $unit . ' on ' . date("M jS", strtotime($activity[5])) . " (" . calculatePace($activity[29],$activity[24],$use_miles) . " min/" . $unit . ") with #nikeplus " . $nikeurl, 'largetype' => $title . "\r" . $subtitle), '');
+				$w->result(null, serialize(array('' /*other_action*/ ,$nikeurl /* url */)),$tilte,$subtitle, './images/' . $activity[17] . '.png', 'yes', array('copy' => 'I ran ' . $distance . " " . $unit . ' on ' . date("M jS", strtotime($activity[5])) . " (" . calculatePace($activity[29],$activity[24],$use_miles) . " min/" . $unit . ") with #nikeplus " . $nikeurl, 'largetype' => $title . "\r" . $subtitle), '');
 			}
 
 			if($noresult) {
