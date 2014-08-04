@@ -353,7 +353,7 @@ if (mb_strlen($query) < 3 ||
 
 		$w->result(null, '', 'Browse all your runs by year', 'Browse by year and then by month', './images/' . date("Y") . '.png', 'no', null, 'Year▹');
 		
-		$w->result(null, '', 'Browse all your runs', 'Browse by year and then by month', './images/' . date("Y") . '.png', 'no', null, 'All▹');
+		$w->result(null, '', 'Browse all your runs', 'Display all your runs', './images/' . 'track' . '.png', 'no', null, 'All▹');
 
 		$w->result(null, '', 'Get your shoes stats', 'Browse all your shoes', './images/shoes.png', 'no', null, 'Shoes▹');
 
@@ -503,7 +503,7 @@ if (mb_strlen($query) < 3 ||
 			//
 			$start = $month_counter = strtotime(date("Y-m-d"));
 			
-			$end= strtotime('2009-02-01');
+			$end= strtotime('2002-01-01');
 			$old_year=0;
 			while($month_counter >= $end)
 			{			     
