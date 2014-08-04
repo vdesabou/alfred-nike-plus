@@ -507,6 +507,12 @@ class Workflows {
 		return $temp;
 	}
 	
+	/**
+	 * internet function.
+	 * 
+	 * @access public
+	 * @return void
+	 */
 	public function internet()
 	{
 		$internet = @fsockopen("www.google.com",80);
