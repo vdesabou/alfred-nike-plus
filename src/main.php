@@ -351,7 +351,9 @@ if (mb_strlen($query) < 3 ||
 
 		$w->result(null, '', 'Browse your runs for ' . getMonthName(intval(date("m"))), 'Browse current month', './images/' . date("m") . '.png', 'no', null, 'Year▹' . date("Y") . '▹' . date("m") . '▹' );
 
-		$w->result(null, '', 'Browse all your runs', 'Browse by year and then by month', './images/' . date("Y") . '.png', 'no', null, 'Year▹');
+		$w->result(null, '', 'Browse all your runs by year', 'Browse by year and then by month', './images/' . date("Y") . '.png', 'no', null, 'Year▹');
+		
+		$w->result(null, '', 'Browse all your runs', 'Browse by year and then by month', './images/' . date("Y") . '.png', 'no', null, 'All▹');
 
 		$w->result(null, '', 'Get your shoes stats', 'Browse all your shoes', './images/shoes.png', 'no', null, 'Shoes▹');
 
@@ -494,39 +496,237 @@ if (mb_strlen($query) < 3 ||
 			if($noresult) {
 				$w->result(null, 'help', "There is no run yet. Go for a run!", "#neverstoprunning #justdoit #nikeplus", './images/warning.png', 'no', null, '');
 			}
-		} else if ($kind == "Shoes") {
+		} else if ($kind == "All") {
 
+			//
+			// Display all runs
+			//
+			$start = $month_counter = strtotime(date("Y-m-d"));
+			
+			$end= strtotime('2009-02-01');
+			$old_year=0;
+			while($month_counter >= $end)
+			{			     
+			    
+				$year = date('Y', $month_counter);
+				$month = date('m', $month_counter); 
+			    //
+			    // Display summary of year
+			    //
+			    if($old_year != $year) {
+				    
+					try {
+	
+						$getActivities = "select * from activities where strftime('%Y',startTimeUtc)=:year";
+	
+						$stmt2 = $db->prepare($getActivities);
+						$stmt2->bindValue(':year', '' . $year . '');
+						$stmt2->execute();
+	
+					} catch (PDOException $e) {
+						handleDbIssuePdo($db);
+						return;
+					}
+	
+					// get all activities for year
+					$total_duration=0;
+					$total_distance=0;
+					$total_activities=0;
+					$total_fuel=0;
+					$total_calories=0;
+					$noresult=true;
+					while ($activity = $stmt2->fetch()) {
+	
+						$noresult=false;
+						$total_duration+=$activity[29];
+						$total_distance+=$activity[24];
+						$total_activities++;
+						$total_fuel+=$activity[26];
+						$total_calories+=$activity[28];
+					}
+					
+					if(!$noresult) {
+						$distance = $use_miles ? round($total_distance* 0.6213711922,2) : round($total_distance,2);
+						$average_distance = round($distance/$total_activities,2);
+						
+						$title = "Runs: " . $total_activities  . " ● Distance: " . $distance . " " . $unit . " ● Average Pace: " . calculatePace($total_duration,$total_distance,$use_miles) . " min/" . $unit . "";
+						$subtitle = "Fuel: " . $total_fuel . " ● Calories: " . $total_calories . " ● Average Distance: " . $average_distance . " " . $unit;
+						
+						$copytext = "#nikeplus for " . $year . ': ' .$title . "\r" . '(collected by http://www.packal.org/workflow/nike-plus)';
+														
+						$w->result(null, '', $title, $subtitle, './images/' . $year . '.png', 'no', array('copy' => $copytext, 'largetype' => $copytext), "Year▹" . $year . "▹");
+					}
+				    
+			    } 
 				//
-				// Browse by shoes
+				// Get all activities for month
 				//
+	
 				try {
-
-					$getShoes = "select shoes_name,shoes_distance,shoes_activityCount,shoes_retired,shoes_percentage from activities where shoes_activityCount!= 0 group by shoes_name order by shoes_activityCount desc";
-
-					$stmt = $db->prepare($getShoes);
+	
+					$getActivities = "select * from activities where (strftime('%m',startTimeUtc)=:month and strftime('%Y',startTimeUtc)=:year) order by startTimeUtc desc";
+	
+					$stmt = $db->prepare($getActivities);
+					$stmt->bindValue(':year', '' . $year . '');
+					$stmt->bindValue(':month', '' . $month . '');
 					$stmt->execute();
-
+	
 				} catch (PDOException $e) {
 					handleDbIssuePdo($db);
 					return;
 				}
-
-				// display all shoes
+	
+				// display summary of month
+				try {
+	
+					$getActivities = "select * from activities where (strftime('%m',startTimeUtc)=:month and strftime('%Y',startTimeUtc)=:year)";
+	
+					$stmt2 = $db->prepare($getActivities);
+					$stmt2->bindValue(':year', '' . $year . '');
+					$stmt2->bindValue(':month', '' . $month . '');
+					$stmt2->execute();
+	
+				} catch (PDOException $e) {
+					handleDbIssuePdo($db);
+					return;
+				}
+	
+				$total_duration=0;
+				$total_distance=0;
+				$total_activities=0;
+				$total_fuel=0;
+				$total_calories=0;
 				$noresult=true;
-				while ($shoe = $stmt->fetch()) {
-
+				while ($activity = $stmt2->fetch()) {
+	
 					$noresult=false;
-
-					$distance = $use_miles ? round($shoe[1]* 0.6213711922,2) : round($shoe[1],2);
-					$retired = $shoe[3] ? "true" : "false";
-					$w->result(null, '', $shoe[0]  . " ● Distance: " . $distance . " " . $unit . " ● Runs: " . $shoe[2], "Retired: " . $retired, './images/shoes.png', 'no', null, '');
-
+					$total_duration+=$activity[29];
+					$total_distance+=$activity[24];
+					$total_activities++;
+					$total_fuel+=$activity[26];
+					$total_calories+=$activity[28];
 				}
-
-				if($noresult) {
-					$w->result(null, 'help', "There is no run yet. Go for a run!", "#neverstoprunning #justdoit #nikeplus", './images/warning.png', 'no', null, '');
+				
+				if(!$noresult) {
+					$distance = $use_miles ? round($total_distance* 0.6213711922,2) : round($total_distance,2);
+					$average_distance = round($distance/$total_activities,2);
+					
+					$title = "TOTAL 🏃 Runs: " . $total_activities  . " ● Distance: " . $distance . " " . $unit . " ● Average Pace: " . calculatePace($total_duration,$total_distance,$use_miles) . " min/" . $unit . "";
+					$subtitle = "Fuel: " . $total_fuel . " ● Calories: " . $total_calories . " ● Average Distance: " . $average_distance . " " . $unit;
+					
+					$copytext = "#nikeplus for " . date("F", strtotime($year . "-" . $month)) . ': ' .$title . "\r" . '(collected by http://www.packal.org/workflow/nike-plus)';
+					
+					$w->result(null, '', $title, $subtitle, './images/' . $month . '.png', 'no', array('copy' => $copytext, 'largetype' => $copytext), "Year▹" . $year . "▹" . $activityByMonth[0] . "▹");
 				}
+				
+				// display all activities
+				$noresult=true;
+				while ($activity = $stmt->fetch()) {
+	
+	
+						$noresult=false;
+		
+						$distance = $use_miles ? round($activity[24]* 0.6213711922,2) : round($activity[24],2);
+		
+						$weather="❔";
+						if($activity[14]=="sunny") {
+							$weather = "☀️";
+						} else if($activity[14]=="partly_sunny") {
+								$weather = "⛅️";
+							} else if($activity[14]=="cloudy") {
+								$weather = "☁️";
+							} else if($activity[14]=="rainy") {
+								$weather = "☔️";
+							} else if($activity[14]=="snowy") {
+								$weather = "❄️";
+							}
+		
+						$emotion="❔";
+						if($activity[15]=="unstoppable" || $activity[15]=="superhero") {
+							$emotion = "😄";
+						} else if($activity[15]=="great") {
+								$emotion = "😃";
+							} else if($activity[15]=="so_so") {
+								$emotion = "😔";
+							} else if($activity[15]=="tired") {
+								$emotion = "😞";
+							} else if($activity[15]=="injured" || $activity[15]=="amped") {
+								$emotion = "😵";
+							}
+		
+						$address = explode(',', $activity[31]);
+		
+						$subtitle = "Fuel: " . $activity[26] . " ● Calories: " . $activity[28];
+		
+						if($address[1] != "") {
+							$subtitle = $subtitle . " ● City: " . ltrim($address[1], ' 0123456789');
+						}
+		
+		
+						if($activity[16] != "" && $activity[16] != "note") {
+							$subtitle = $subtitle . " ● Note: " . $activity[16];
+						}
+		
+						if($activity[20] != "") {
+							$subtitle = $subtitle . " ● Shoes: " . $activity[20];
+							/*
+							if($activity[21] != "") {
+								$shoes_distance = $use_miles ? round($activity[21]* 0.6213711922,2) : round($activity[21],2);
+								$subtitle = $subtitle . "(" . $shoes_distance . " " . $unit . ")";
+		
+							}
+		*/
+						}
+		
+						$title = $weather . $emotion . ' ';
+						$title = $title . date("l jS", strtotime($activity[5]));
+						$tilte = $title . " ● Distance: " . $distance . " " . $unit . " ● Average Pace: " . calculatePace($activity[29],$activity[24],$use_miles) . " min/" . $unit . "";
+						
+						$nikeurl = 'https://secure-nikeplus.nike.com/plus/activity/running/' . $username . '/detail/' . $activity[0];
+						$w->result(null, serialize(array('' /*other_action*/ ,$nikeurl /* url */)),$tilte,$subtitle, './images/' . $activity[17] . '.png', 'yes', array('copy' => 'I ran ' . $distance . " " . $unit . ' on ' . date("M jS", strtotime($activity[5])) . " (" . calculatePace($activity[29],$activity[24],$use_miles) . " min/" . $unit . ") with #nikeplus " . $nikeurl, 'largetype' => $title . "\r" . $subtitle), '');
+					}
+		
+					$old_year = date('Y', $month_counter);
+					$month_counter = strtotime("-1 month", $month_counter);
 			}
+	
+	
+
+				
+			} 
+			else if ($kind == "Shoes") {
+	
+					//
+					// Browse by shoes
+					//
+					try {
+	
+						$getShoes = "select shoes_name,shoes_distance,shoes_activityCount,shoes_retired,shoes_percentage from activities where shoes_activityCount!= 0 group by shoes_name order by shoes_activityCount desc";
+	
+						$stmt = $db->prepare($getShoes);
+						$stmt->execute();
+	
+					} catch (PDOException $e) {
+						handleDbIssuePdo($db);
+						return;
+					}
+	
+					// display all shoes
+					$noresult=true;
+					while ($shoe = $stmt->fetch()) {
+	
+						$noresult=false;
+	
+						$distance = $use_miles ? round($shoe[1]* 0.6213711922,2) : round($shoe[1],2);
+						$retired = $shoe[3] ? "true" : "false";
+						$w->result(null, '', $shoe[0]  . " ● Distance: " . $distance . " " . $unit . " ● Runs: " . $shoe[2], "Retired: " . $retired, './images/shoes.png', 'no', null, '');
+	
+					}
+	
+					if($noresult) {
+						$w->result(null, 'help', "There is no run yet. Go for a run!", "#neverstoprunning #justdoit #nikeplus", './images/warning.png', 'no', null, '');
+					}
+				}
 	}
 	////////////
 	//
