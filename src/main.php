@@ -198,7 +198,7 @@ if (mb_strlen($query) < 3 ||
 			return;
 		}
 
-		$averageDistance = $lifetime[0];
+		$AvgDistance = $lifetime[0];
 
 
 		$totalDistance = $use_miles ? round($lifetime[32]* 0.6213711922,0) : round($lifetime[32],0);
@@ -272,8 +272,8 @@ if (mb_strlen($query) < 3 ||
 		}
 		if($lifetime[11] != 0) {
 		
-			$title = 'Total Distance: ' . $totalDistance . " " . $unit . " ● Total Runs: " . $lifetime[11] . " ● Average Pace: " . calculatePace($lifetime[40],$lifetime[32],$use_miles) . " min/" . $unit;
-			$subtitle = "Total Duration: " . round($lifetime[40]/1000/60/60,0) . " hours" . " ● Average Distance: " . round($totalDistance/$lifetime[11],1) . $unit . " ● Average Fuel: " . round($lifetime[38]/$lifetime[11],0) . " " . $nextleveltext;
+			$title = 'TOTAL: 🏃 ' . $lifetime[11] . ' ● 👣 ' . $totalDistance . " " . $unit . " ● 〽️ " . calculatePace($lifetime[40],$lifetime[32],$use_miles) . " min/" . $unit;
+			$subtitle = "🕗 " . round($lifetime[40]/1000/60/60,0) . " hours" . " ● Avg 👣 " . round($totalDistance/$lifetime[11],1) . $unit . " ● Avg Fuel: " . round($lifetime[38]/$lifetime[11],0) . " " . $nextleveltext;
 			
 			$copytext = "My #nikeplus stats: " .$title . "\r" . '(collected by http://www.packal.org/workflow/nike-plus)';
 				
@@ -335,11 +335,11 @@ if (mb_strlen($query) < 3 ||
 		$subtitle = "";
 		if($lifetime[22] != "") {
 			$runFarthest = $use_miles ? round($lifetime[22]* 0.6213711922,2) : round($lifetime[22],2);
-			$subtitle = $subtitle . "Longest distance: " . $runFarthest . " " . $unit;
+			$subtitle = $subtitle . "Longest 👣 " . $runFarthest . " " . $unit;
 		}
 
 		if($lifetime[47] != "") {
-			$subtitle = $subtitle . " ● Longest Duration: " . formatDuration($lifetime[47], true, false);
+			$subtitle = $subtitle . " ● Longest 🕗 " . formatDuration($lifetime[47], true, false);
 
 		}
 
@@ -349,11 +349,11 @@ if (mb_strlen($query) < 3 ||
 		}
 		$w->result(null, serialize(array('' /*other_action*/ ,'https://secure-nikeplus.nike.com/plus/profile/' . $username /* url */)),$title,$subtitle, './images/trophee.png', 'yes', null, '');
 
-		$w->result(null, '', 'Browse your runs for ' . getMonthName(intval(date("m"))), 'Browse current month', './images/' . date("m") . '.png', 'no', null, 'Year▹' . date("Y") . '▹' . date("m") . '▹' );
+		$w->result(null, '', 'Browse your 🏃 for ' . getMonthName(intval(date("m"))), 'Browse current month', './images/' . date("m") . '.png', 'no', null, 'Year▹' . date("Y") . '▹' . date("m") . '▹' );
 
-		$w->result(null, '', 'Browse all your runs by year', 'Browse by year and then by month', './images/' . date("Y") . '.png', 'no', null, 'Year▹');
+		$w->result(null, '', 'Browse all 🏃 runs by year', 'Browse by year and then by month', './images/' . date("Y") . '.png', 'no', null, 'Year▹');
 		
-		$w->result(null, '', 'Browse all your runs', 'Display all your runs', './images/' . 'track' . '.png', 'no', null, 'All▹');
+		$w->result(null, '', 'Browse all your 🏃', 'Display all your runs', './images/' . 'track' . '.png', 'no', null, 'All▹');
 
 		$w->result(null, '', 'Get your shoes stats', 'Browse all your shoes', './images/shoes.png', 'no', null, 'Shoes▹');
 
@@ -482,10 +482,13 @@ if (mb_strlen($query) < 3 ||
 					$total_calories+=$activity[28];
 				}
 				$distance = $use_miles ? round($total_distance* 0.6213711922,2) : round($total_distance,2);
-				$average_distance = round($distance/$total_activities,2);
+				$Avg_distance = round($distance/$total_activities,2);
 				
-				$title = "Runs: " . $total_activities  . " ● Distance: " . $distance . " " . $unit . " ● Average Pace: " . calculatePace($total_duration,$total_distance,$use_miles) . " min/" . $unit . "";
-				$subtitle = "Fuel: " . $total_fuel . " ● Calories: " . $total_calories . " ● Average Distance: " . $average_distance . " " . $unit;
+				$title = "TOTAL: 🏃 " . $total_activities  . " ● 👣 " . $distance . " " . $unit; 
+				$title .= " ● 🕗 ";
+				$title .= round($total_duration/1000/60/60,0) . " hours";
+				$title .= " ● 〽️ " . calculatePace($total_duration,$total_distance,$use_miles) . " min/" . $unit . "";
+				$subtitle = "Fuel: " . $total_fuel . " ● Calories: " . $total_calories . " ● Avg 👣 " . $Avg_distance . " " . $unit;
 				
 				$copytext = "#nikeplus for " . $activityByYear[0] . ': ' .$title . "\r" . '(collected by http://www.packal.org/workflow/nike-plus)';
 												
@@ -547,10 +550,13 @@ if (mb_strlen($query) < 3 ||
 					
 					if(!$noresult) {
 						$distance = $use_miles ? round($total_distance* 0.6213711922,2) : round($total_distance,2);
-						$average_distance = round($distance/$total_activities,2);
+						$Avg_distance = round($distance/$total_activities,2);
 						
-						$title = "Runs: " . $total_activities  . " ● Distance: " . $distance . " " . $unit . " ● Average Pace: " . calculatePace($total_duration,$total_distance,$use_miles) . " min/" . $unit . "";
-						$subtitle = "Fuel: " . $total_fuel . " ● Calories: " . $total_calories . " ● Average Distance: " . $average_distance . " " . $unit;
+						$title = "TOTAL: 🏃 " . $total_activities  . " ● 👣 " . $distance . " " . $unit; 
+						$title .= " ● 🕗 ";
+						$title .= round($total_duration/1000/60/60,0) . " hours";
+						$title .= " ● 〽️ " . calculatePace($total_duration,$total_distance,$use_miles) . " min/" . $unit . "";
+						$subtitle = "Fuel: " . $total_fuel . " ● Calories: " . $total_calories . " ● Avg 👣 " . $Avg_distance . " " . $unit;
 						
 						$copytext = "#nikeplus for " . $year . ': ' .$title . "\r" . '(collected by http://www.packal.org/workflow/nike-plus)';
 														
@@ -609,10 +615,13 @@ if (mb_strlen($query) < 3 ||
 				
 				if(!$noresult) {
 					$distance = $use_miles ? round($total_distance* 0.6213711922,2) : round($total_distance,2);
-					$average_distance = round($distance/$total_activities,2);
+					$Avg_distance = round($distance/$total_activities,2);
 					
-					$title = "TOTAL 🏃 Runs: " . $total_activities  . " ● Distance: " . $distance . " " . $unit . " ● Average Pace: " . calculatePace($total_duration,$total_distance,$use_miles) . " min/" . $unit . "";
-					$subtitle = "Fuel: " . $total_fuel . " ● Calories: " . $total_calories . " ● Average Distance: " . $average_distance . " " . $unit;
+					$title = "TOTAL: 🏃 " . $total_activities  . " ● 👣 " . $distance . " " . $unit; 
+					$title .= " ● 🕗 ";
+					$title .= round($total_duration/1000/60/60,0) . " hours";
+					$title .= " ● 〽️ " . calculatePace($total_duration,$total_distance,$use_miles) . " min/" . $unit . "";
+					$subtitle = "Fuel: " . $total_fuel . " ● Calories: " . $total_calories . " ● Avg 👣 " . $Avg_distance . " " . $unit;
 					
 					$copytext = "#nikeplus for " . date("F", strtotime($year . "-" . $month)) . ': ' .$title . "\r" . '(collected by http://www.packal.org/workflow/nike-plus)';
 					
@@ -677,13 +686,25 @@ if (mb_strlen($query) < 3 ||
 							}
 		*/
 						}
-		
-						$title = $weather . $emotion . ' ';
-						$title = $title . date("l jS", strtotime($activity[5]));
-						$tilte = $title . " ● Distance: " . $distance . " " . $unit . " ● Average Pace: " . calculatePace($activity[29],$activity[24],$use_miles) . " min/" . $unit . "";
+
+						$title = '';
+						$title .= $weather;
+						$title .= $emotion;
+						$title .= " ";
+						$title .= date("D jS", strtotime($activity[5]));
+						$title .= " ● 👣 ";
+						$title .=  $distance;
+						$title .= " ";
+						$title .= $unit;
+						$title .= " ● 🕗 ";
+						$title .= formatDuration($activity[29], true, false);
+						$title .= " ● 〽️ ";
+						$title .= calculatePace($activity[29],$activity[24],$use_miles);
+						$title .=  " min/";
+						$title .= $unit;
 						
 						$nikeurl = 'https://secure-nikeplus.nike.com/plus/activity/running/' . $username . '/detail/' . $activity[0];
-						$w->result(null, serialize(array('' /*other_action*/ ,$nikeurl /* url */)),$tilte,$subtitle, './images/' . $activity[17] . '.png', 'yes', array('copy' => 'I ran ' . $distance . " " . $unit . ' on ' . date("M jS", strtotime($activity[5])) . " (" . calculatePace($activity[29],$activity[24],$use_miles) . " min/" . $unit . ") with #nikeplus " . $nikeurl, 'largetype' => $title . "\r" . $subtitle), '');
+						$w->result(null, serialize(array('' /*other_action*/ ,$nikeurl /* url */)),$title,$subtitle, './images/' . $activity[17] . '.png', 'yes', array('copy' => 'I ran ' . $distance . " " . $unit . ' on ' . date("M jS", strtotime($activity[5])) . " (" . calculatePace($activity[29],$activity[24],$use_miles) . " min/" . $unit . ") with #nikeplus " . $nikeurl, 'largetype' => $title . "\r" . $subtitle), '');
 					}
 		
 					$old_year = date('Y', $month_counter);
@@ -719,7 +740,7 @@ if (mb_strlen($query) < 3 ||
 	
 						$distance = $use_miles ? round($shoe[1]* 0.6213711922,2) : round($shoe[1],2);
 						$retired = $shoe[3] ? "true" : "false";
-						$w->result(null, '', $shoe[0]  . " ● Distance: " . $distance . " " . $unit . " ● Runs: " . $shoe[2], "Retired: " . $retired, './images/shoes.png', 'no', null, '');
+						$w->result(null, '', $shoe[0]  . " ● 👣 " . $distance . " " . $unit . " ● 🏃: " . $shoe[2], "Retired: " . $retired, './images/shoes.png', 'no', null, '');
 	
 					}
 	
@@ -798,10 +819,13 @@ if (mb_strlen($query) < 3 ||
 			if(!$noresult) {
 		
 				$distance = $use_miles ? round($total_distance* 0.6213711922,2) : round($total_distance,2);
-				$average_distance = round($distance/$total_activities,2);
+				$Avg_distance = round($distance/$total_activities,2);
 				
-				$title = "TOTAL 🏃 Runs: " . $total_activities  . " ● Distance: " . $distance . " " . $unit . " ● Average Pace: " . calculatePace($total_duration,$total_distance,$use_miles) . " min/" . $unit . "";
-				$subtitle = "Fuel: " . $total_fuel . " ● Calories: " . $total_calories . " ● Average Distance: " . $average_distance . " " . $unit;
+				$title = "TOTAL: 🏃 " . $total_activities  . " ● 👣 " . $distance . " " . $unit; 
+				$title .= " ● 🕗 ";
+				$title .= round($total_duration/1000/60/60,0) . " hours";
+				$title .= " ● 〽️ " . calculatePace($total_duration,$total_distance,$use_miles) . " min/" . $unit . "";
+				$subtitle = "Fuel: " . $total_fuel . " ● Calories: " . $total_calories . " ● Avg 👣 " . $Avg_distance . " " . $unit;
 				
 				$copytext = "#nikeplus for " . date("F", strtotime($year . "-" . $month)) . ': ' .$title . "\r" . '(collected by http://www.packal.org/workflow/nike-plus)';
 			
@@ -846,10 +870,13 @@ if (mb_strlen($query) < 3 ||
 				}
 
 				$distance = $use_miles ? round($total_distance* 0.6213711922,2) : round($total_distance,2);
-				$average_distance = round($distance/$total_activities,2);
+				$Avg_distance = round($distance/$total_activities,2);
 				
-				$title = "Runs: " . $total_activities  . " ● Distance: " . $distance . " " . $unit . " ● Average Pace: " . calculatePace($total_duration,$total_distance,$use_miles) . " min/" . $unit . "";
-				$subtitle = "Fuel: " . $total_fuel . " ● Calories: " . $total_calories . " ● Average Distance: " . $average_distance . " " . $unit;
+				$title = "TOTAL: 🏃 " . $total_activities  . " ● 👣 " . $distance . " " . $unit; 
+				$title .= " ● 🕗 ";
+				$title .= round($total_duration/1000/60/60,0) . " hours";
+				$title .= " ● 〽️ " . calculatePace($total_duration,$total_distance,$use_miles) . " min/" . $unit . "";
+				$subtitle = "Fuel: " . $total_fuel . " ● Calories: " . $total_calories . " ● Avg 👣 " . $Avg_distance . " " . $unit;
 				
 				$copytext = "#nikeplus for " . date("F", strtotime($year . "-" . $activityByMonth[0])) . ': ' .$title . "\r" . '(collected by http://www.packal.org/workflow/nike-plus)';
 				
@@ -935,10 +962,13 @@ if (mb_strlen($query) < 3 ||
 			
 			if(!$noresult) {
 				$distance = $use_miles ? round($total_distance* 0.6213711922,2) : round($total_distance,2);
-				$average_distance = round($distance/$total_activities,2);
+				$Avg_distance = round($distance/$total_activities,2);
 				
-				$title = "TOTAL 🏃 Runs: " . $total_activities  . " ● Distance: " . $distance . " " . $unit . " ● Average Pace: " . calculatePace($total_duration,$total_distance,$use_miles) . " min/" . $unit . "";
-				$subtitle = "Fuel: " . $total_fuel . " ● Calories: " . $total_calories . " ● Average Distance: " . $average_distance . " " . $unit;
+				$title = "TOTAL: 🏃 " . $total_activities  . " ● 👣 " . $distance . " " . $unit; 
+				$title .= " ● 🕗 ";
+				$title .= round($total_duration/1000/60/60,0) . " hours";
+				$title .= " ● 〽️ " . calculatePace($total_duration,$total_distance,$use_miles) . " min/" . $unit . "";
+				$subtitle = "Fuel: " . $total_fuel . " ● Calories: " . $total_calories . " ● Avg 👣 " . $Avg_distance . " " . $unit;
 				
 				$copytext = "#nikeplus for " . date("F", strtotime($year . "-" . $month)) . ': ' .$title . "\r" . '(collected by http://www.packal.org/workflow/nike-plus)';
 				
@@ -1004,12 +1034,25 @@ if (mb_strlen($query) < 3 ||
 */
 				}
 
-				$title = $weather . $emotion . ' ';
-				$title = $title . date("l jS", strtotime($activity[5]));
-				$tilte = $title . " ● Distance: " . $distance . " " . $unit . " ● Average Pace: " . calculatePace($activity[29],$activity[24],$use_miles) . " min/" . $unit . "";
+				$title = '';
+				$title .= $weather;
+				$title .= $emotion;
+				$title .= " ";
+				$title .= date("D jS", strtotime($activity[5]));
+				$title .= " ● 👣 ";
+				$title .=  $distance;
+				$title .= " ";
+				$title .= $unit;
+				$title .= " ● 🕗 ";
+				$title .= formatDuration($activity[29], true, false);
+				$title .= " ● 〽️ ";
+				$title .= calculatePace($activity[29],$activity[24],$use_miles);
+				$title .=  " min/";
+				$title .= $unit;
+
 				
 				$nikeurl = 'https://secure-nikeplus.nike.com/plus/activity/running/' . $username . '/detail/' . $activity[0];
-				$w->result(null, serialize(array('' /*other_action*/ ,$nikeurl /* url */)),$tilte,$subtitle, './images/' . $activity[17] . '.png', 'yes', array('copy' => 'I ran ' . $distance . " " . $unit . ' on ' . date("M jS", strtotime($activity[5])) . " (" . calculatePace($activity[29],$activity[24],$use_miles) . " min/" . $unit . ") with #nikeplus " . $nikeurl, 'largetype' => $title . "\r" . $subtitle), '');
+				$w->result(null, serialize(array('' /*other_action*/ ,$nikeurl /* url */)), $title ,$subtitle, './images/' . $activity[17] . '.png', 'yes', array('copy' => 'I ran ' . $distance . " " . $unit . ' on ' . date("M jS", strtotime($activity[5])) . " (" . calculatePace($activity[29],$activity[24],$use_miles) . " min/" . $unit . ") with #nikeplus " . $nikeurl, 'largetype' => $title . "\r" . $subtitle), '');
 			}
 
 			if($noresult) {
