@@ -34,7 +34,7 @@ if ($other_action == "update_library") {
 		return;
 	}
 	
-	updateLibrary(5);
+	updateLibrary(15);
 	return;
 }else if ($other_action == "credentials") {
   
