@@ -264,7 +264,7 @@ if (mb_strlen($query) < 3 ||
 
 		if($nextlevel != "") {
 						
-			$nextleveltext = " ● Next level (";
+			$nextleveltext = " ● Next 🔰 (";
 			$nextleveltext = $nextleveltext . $nextlevel;
 			$nextleveltext = $nextleveltext . "): ";
 			$nextleveltext = $nextleveltext . $nextlevelremaining;
@@ -484,7 +484,7 @@ if (mb_strlen($query) < 3 ||
 				$distance = $use_miles ? round($total_distance* 0.6213711922,2) : round($total_distance,2);
 				$Avg_distance = round($distance/$total_activities,2);
 				
-				$title = "TOTAL: 🏃 " . $total_activities  . " ● 👣 " . $distance . " " . $unit; 
+				$title = "YEAR: 🏃 " . $total_activities  . " ● 👣 " . $distance . " " . $unit; 
 				$title .= " ● 🕗 ";
 				$title .= round($total_duration/1000/60/60,0) . " hours";
 				$title .= " ● 〽️ " . calculatePace($total_duration,$total_distance,$use_miles) . " min/" . $unit . "";
@@ -552,7 +552,7 @@ if (mb_strlen($query) < 3 ||
 						$distance = $use_miles ? round($total_distance* 0.6213711922,2) : round($total_distance,2);
 						$Avg_distance = round($distance/$total_activities,2);
 						
-						$title = "TOTAL: 🏃 " . $total_activities  . " ● 👣 " . $distance . " " . $unit; 
+						$title = "YEAR: 🏃 " . $total_activities  . " ● 👣 " . $distance . " " . $unit; 
 						$title .= " ● 🕗 ";
 						$title .= round($total_duration/1000/60/60,0) . " hours";
 						$title .= " ● 〽️ " . calculatePace($total_duration,$total_distance,$use_miles) . " min/" . $unit . "";
@@ -617,7 +617,7 @@ if (mb_strlen($query) < 3 ||
 					$distance = $use_miles ? round($total_distance* 0.6213711922,2) : round($total_distance,2);
 					$Avg_distance = round($distance/$total_activities,2);
 					
-					$title = "TOTAL: 🏃 " . $total_activities  . " ● 👣 " . $distance . " " . $unit; 
+					$title = "MONTH: 🏃 " . $total_activities  . " ● 👣 " . $distance . " " . $unit; 
 					$title .= " ● 🕗 ";
 					$title .= round($total_duration/1000/60/60,0) . " hours";
 					$title .= " ● 〽️ " . calculatePace($total_duration,$total_distance,$use_miles) . " min/" . $unit . "";
@@ -625,7 +625,7 @@ if (mb_strlen($query) < 3 ||
 					
 					$copytext = "#nikeplus for " . date("F", strtotime($year . "-" . $month)) . ': ' .$title . "\r" . '(collected by http://www.packal.org/workflow/nike-plus)';
 					
-					$w->result(null, '', $title, $subtitle, './images/' . $month . '.png', 'no', array('copy' => $copytext, 'largetype' => $copytext), "Year▹" . $year . "▹" . $activityByMonth[0] . "▹");
+					$w->result(null, '', $title, $subtitle, './images/' . $month . '.png', 'no', array('copy' => $copytext, 'largetype' => $copytext), "Year▹" . $year . "▹" . $month . "▹");
 				}
 				
 				// display all activities
@@ -821,7 +821,7 @@ if (mb_strlen($query) < 3 ||
 				$distance = $use_miles ? round($total_distance* 0.6213711922,2) : round($total_distance,2);
 				$Avg_distance = round($distance/$total_activities,2);
 				
-				$title = "TOTAL: 🏃 " . $total_activities  . " ● 👣 " . $distance . " " . $unit; 
+				$title = "YEAR: 🏃 " . $total_activities  . " ● 👣 " . $distance . " " . $unit; 
 				$title .= " ● 🕗 ";
 				$title .= round($total_duration/1000/60/60,0) . " hours";
 				$title .= " ● 〽️ " . calculatePace($total_duration,$total_distance,$use_miles) . " min/" . $unit . "";
@@ -829,7 +829,7 @@ if (mb_strlen($query) < 3 ||
 				
 				$copytext = "#nikeplus for " . date("F", strtotime($year . "-" . $month)) . ': ' .$title . "\r" . '(collected by http://www.packal.org/workflow/nike-plus)';
 			
-				$w->result(null, '', $title, $subtitle, './images/' . $year . '.png', 'no', array('copy' => $copytext, 'largetype' => $copytext), "Year▹" . $year . "▹" . $activityByMonth[0] . "▹");
+				$w->result(null, '', $title, $subtitle, './images/' . $year . '.png', 'no', array('copy' => $copytext, 'largetype' => $copytext), "");
 			}
 			
 			
@@ -872,7 +872,7 @@ if (mb_strlen($query) < 3 ||
 				$distance = $use_miles ? round($total_distance* 0.6213711922,2) : round($total_distance,2);
 				$Avg_distance = round($distance/$total_activities,2);
 				
-				$title = "TOTAL: 🏃 " . $total_activities  . " ● 👣 " . $distance . " " . $unit; 
+				$title = "MONTH: 🏃 " . $total_activities  . " ● 👣 " . $distance . " " . $unit; 
 				$title .= " ● 🕗 ";
 				$title .= round($total_duration/1000/60/60,0) . " hours";
 				$title .= " ● 〽️ " . calculatePace($total_duration,$total_distance,$use_miles) . " min/" . $unit . "";
@@ -964,7 +964,7 @@ if (mb_strlen($query) < 3 ||
 				$distance = $use_miles ? round($total_distance* 0.6213711922,2) : round($total_distance,2);
 				$Avg_distance = round($distance/$total_activities,2);
 				
-				$title = "TOTAL: 🏃 " . $total_activities  . " ● 👣 " . $distance . " " . $unit; 
+				$title = "MONTH: 🏃 " . $total_activities  . " ● 👣 " . $distance . " " . $unit; 
 				$title .= " ● 🕗 ";
 				$title .= round($total_duration/1000/60/60,0) . " hours";
 				$title .= " ● 〽️ " . calculatePace($total_duration,$total_distance,$use_miles) . " min/" . $unit . "";
@@ -972,7 +972,7 @@ if (mb_strlen($query) < 3 ||
 				
 				$copytext = "#nikeplus for " . date("F", strtotime($year . "-" . $month)) . ': ' .$title . "\r" . '(collected by http://www.packal.org/workflow/nike-plus)';
 				
-				$w->result(null, '', $title, $subtitle, './images/' . $month . '.png', 'no', array('copy' => $copytext, 'largetype' => $copytext), "Year▹" . $year . "▹" . $activityByMonth[0] . "▹");
+				$w->result(null, '', $title, $subtitle, './images/' . $month . '.png', 'no', array('copy' => $copytext, 'largetype' => $copytext), "");
 			}
 			
 			// display all activities
