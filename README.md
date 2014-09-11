@@ -37,4 +37,4 @@ Note that you can also force a check for update in Settings section
 
 ## Download the workflow on Packal
 
-[![Download Workflow](https://raw.githubusercontent.com/vdesabou/alfred-nike-plus/master/images/alfred-workflow-icon.png)](https://raw.githubusercontent.com/packal/repository/master/com.vdesabou.nike.plus/nikeplus.alfredworkflow)
+[![Download Workflow](https://raw.github.com/vdesabou/alfred-spotify-mini-player/master/images/alfred-workflow-icon.png)](http://www.packal.org/workflow/nike-plus)
