@@ -93,7 +93,7 @@
 	<key>disabled</key>
 	<false/>
 	<key>name</key>
-	<string>Nike Plus 1.1.2</string>
+	<string>Nike Plus 1.1.3</string>
 	<key>objects</key>
 	<array>
 		<dict>
@@ -218,29 +218,12 @@
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>escaping</key>
-				<integer>38</integer>
-				<key>script</key>
-				<string>php -f ./src/action.php -- "{query}"</string>
-				<key>type</key>
-				<integer>0</integer>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.output.script</string>
-			<key>uid</key>
-			<string>3B650C5A-903B-4361-B88A-9CC2C6CAA930</string>
-			<key>version</key>
-			<integer>0</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
 				<key>argumenttype</key>
 				<integer>2</integer>
 				<key>keyword</key>
 				<string>nikeplus_get_latest_activities</string>
 				<key>subtext</key>
-				<string>Get up to last 5 activities</string>
+				<string>Get up to last 10 activities</string>
 				<key>text</key>
 				<string>Refresh NikePlus library</string>
 				<key>withspace</key>
@@ -269,6 +252,23 @@ echo "$args";</string>
 			<string>alfred.workflow.action.script</string>
 			<key>uid</key>
 			<string>44D26142-A7F4-4083-B637-93A64885907E</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>escaping</key>
+				<integer>38</integer>
+				<key>script</key>
+				<string>php -f ./src/action.php -- "{query}"</string>
+				<key>type</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.script</string>
+			<key>uid</key>
+			<string>3B650C5A-903B-4361-B88A-9CC2C6CAA930</string>
 			<key>version</key>
 			<integer>0</integer>
 		</dict>
