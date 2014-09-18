@@ -1,5 +1,13 @@
 ## History
 
+1.1.3:
+
+* Browse all runs
+
+* Add Duration
+
+* Fixes and cosmetic changes
+
 1.1.2:
 
 * Added Average Distance
