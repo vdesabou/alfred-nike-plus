@@ -405,20 +405,7 @@ if (mb_strlen($query) < 3 ||
 	//
 	////////////
 	if (substr_count($query, '▹') == 0) {
-		//
-		// Search categories for fast access
-		//
-		if (strpos(strtolower('playlists'), strtolower($query)) !== false) {
-			$w->result(null, '', 'Playlists', 'Browse by playlist', './images/' . $theme . '/' . 'playlists.png', 'no', null, 'Playlist▹');
-		} else if (strpos(strtolower('albums'), strtolower($query)) !== false) {
-				$w->result(null, '', 'Albums', 'Browse by album', './images/' . $theme . '/' . 'albums.png', 'no', null, 'Album▹');
-			} else if (strpos(strtolower('artists'), strtolower($query)) !== false) {
-				$w->result(null, '', 'Artists', 'Browse by artist', './images/' . $theme . '/' . 'artists.png', 'no', null, 'Artist▹');
-			} else if (strpos(strtolower('alfred'), strtolower($query)) !== false) {
-				$w->result(null, '', 'Alfred Playlist (currently set to <' . $alfred_playlist_name . '>)' , 'Choose one of your playlists and add tracks, album, playlist to it directly from the workflow', './images/' . $theme . '/' . 'alfred_playlist.png', 'no', null, 'Alfred Playlist▹');
-			} else if (strpos(strtolower('settings'), strtolower($query)) !== false) {
-				$w->result(null, '', 'Settings', 'Go to settings', './images/' . $theme . '/' . 'settings.png', 'no', null, 'Settings▹');
-			}
+
 
 	} ////////////
 	//
