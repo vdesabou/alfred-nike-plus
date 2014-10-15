@@ -349,8 +349,6 @@ if (mb_strlen($query) < 3 ||
 
 		$w->result(null, '', 'Browse all your 🏃', 'Display all your runs', './images/' . 'track' . '.png', 'no', null, 'All▹');
 
-		$w->result(null, '', 'Display some fancy statistics', 'Display some ', './images/' . 'fixthis' . '.png', 'no', null, 'Stats▹');
-
 		$w->result(null, '', 'Get your shoes stats', 'Browse all your shoes', './images/shoes.png', 'no', null, 'Shoes▹');
 
 		$w->result(null, '', 'Go to settings', 'Units=<' . $unit . '>' . ' User=<' . $username . '>', './images/credentials.png', 'no', null, 'Settings▹');
