@@ -93,12 +93,14 @@
 	<key>disabled</key>
 	<false/>
 	<key>name</key>
-	<string>Nike Plus 1.1.3</string>
+	<string>Nike Plus</string>
 	<key>objects</key>
 	<array>
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>concurrently</key>
+				<false/>
 				<key>escaping</key>
 				<integer>38</integer>
 				<key>script</key>
@@ -117,11 +119,19 @@
 			<key>config</key>
 			<dict>
 				<key>argumenttype</key>
-				<integer>2</integer>
+				<integer>1</integer>
 				<key>escaping</key>
 				<integer>38</integer>
 				<key>keyword</key>
 				<string>nikeplus</string>
+				<key>queuedelaycustom</key>
+				<integer>1</integer>
+				<key>queuedelayimmediatelyinitially</key>
+				<false/>
+				<key>queuedelaymode</key>
+				<integer>0</integer>
+				<key>queuemode</key>
+				<integer>1</integer>
 				<key>runningsubtext</key>
 				<string>Wait for it...</string>
 				<key>script</key>
@@ -133,7 +143,7 @@
 				<key>type</key>
 				<integer>0</integer>
 				<key>withspace</key>
-				<false/>
+				<true/>
 			</dict>
 			<key>type</key>
 			<string>alfred.workflow.input.scriptfilter</string>
@@ -201,6 +211,8 @@
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>concurrently</key>
+				<false/>
 				<key>escaping</key>
 				<integer>127</integer>
 				<key>script</key>
@@ -212,6 +224,46 @@
 			<string>alfred.workflow.action.script</string>
 			<key>uid</key>
 			<string>1E4FBE4D-F098-48A4-8F97-531E4E0FEB36</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>concurrently</key>
+				<false/>
+				<key>escaping</key>
+				<integer>38</integer>
+				<key>script</key>
+				<string>$args=serialize(array('get_latest_activities' /*other_action*/ ,'' /* url */));
+
+echo "$args";</string>
+				<key>type</key>
+				<integer>1</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>44D26142-A7F4-4083-B637-93A64885907E</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>concurrently</key>
+				<false/>
+				<key>escaping</key>
+				<integer>38</integer>
+				<key>script</key>
+				<string>php -f ./src/action.php -- "{query}"</string>
+				<key>type</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.script</string>
+			<key>uid</key>
+			<string>3B650C5A-903B-4361-B88A-9CC2C6CAA930</string>
 			<key>version</key>
 			<integer>0</integer>
 		</dict>
@@ -233,42 +285,6 @@
 			<string>alfred.workflow.input.keyword</string>
 			<key>uid</key>
 			<string>086D0AEB-626F-4B41-A068-BCE379A395AE</string>
-			<key>version</key>
-			<integer>0</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>escaping</key>
-				<integer>38</integer>
-				<key>script</key>
-				<string>$args=serialize(array('get_latest_activities' /*other_action*/ ,'' /* url */));
-
-echo "$args";</string>
-				<key>type</key>
-				<integer>1</integer>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.action.script</string>
-			<key>uid</key>
-			<string>44D26142-A7F4-4083-B637-93A64885907E</string>
-			<key>version</key>
-			<integer>0</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>escaping</key>
-				<integer>38</integer>
-				<key>script</key>
-				<string>php -f ./src/action.php -- "{query}"</string>
-				<key>type</key>
-				<integer>0</integer>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.output.script</string>
-			<key>uid</key>
-			<string>3B650C5A-903B-4361-B88A-9CC2C6CAA930</string>
 			<key>version</key>
 			<integer>0</integer>
 		</dict>
