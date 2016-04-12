@@ -1,15 +1,15 @@
 <?php
 
 /**
- * A PHP class that makes it easy to get your data from the Nike+ service 
- * 
+ * A PHP class that makes it easy to get your data from the Nike+ service
+ *
  * Nike+PHP v4.x requires PHP 5 with SimpleXML and cURL.
  * Nike+PHP also requires your Nike log in credentials.
- * 
+ *
  * @author Charanjit Chana - http://charanj.it
  * @link http://nikeplusphp.org
  * @version 4.5.1
- * 
+ *
  * Usage:
  * $n = new NikePlusPHP('email@address.com', 'password');
  * $activities = $n->activities();
@@ -34,9 +34,9 @@ class NikePlusPHP {
 	 * __construct()
 	 * Called when you initiate the class and keeps a cookie that allows you to keep authenticating
 	 * against the Nike+ website.
-	 * 
+	 *
 	 * @param string $username your Nike username, should be an email address
-	 * @param string $password your Nike password 
+	 * @param string $password your Nike password
 	 */
 	public function __construct($username, $password) {
 		$this->_login($username, $password);
@@ -45,10 +45,10 @@ class NikePlusPHP {
 	/**
 	 * _login()
 	 * Called by __construct and performs the actual login action.
-	 * 
+	 *
 	 * @param string $username
 	 * @param string $password
-	 * 
+	 *
 	 * @return string
 	 */
 	private function _login($username, $password) {
@@ -86,7 +86,7 @@ class NikePlusPHP {
 
 	/**
 	 * cookieValue()
-	 * returns the cookie value that has been set 
+	 * returns the cookie value that has been set
 	 */
 	public function cookieValue() {
 		return $this->_cookie;
@@ -95,7 +95,7 @@ class NikePlusPHP {
 	/**
 	 * _getNikePlusFile()
 	 * collects the contents of the specified file from Nike+
-	 * 
+	 *
 	 * @param string $path the file you wish to fetch
 	 */
 	private function _getNikePlusFile($path) {
@@ -160,7 +160,7 @@ class NikePlusPHP {
 
 	/**
 	 * allTime()
-	 * a list of your all time stats 
+	 * a list of your all time stats
 	 *
 	 * @return object
 	 */
@@ -174,7 +174,7 @@ class NikePlusPHP {
 	/**
 	 * activity()
 	 * collects the data of a specific activity
-	 * 
+	 *
 	 * @param string $id the id of the activity you wish to get the data for
 	 *
 	 * @return object
@@ -186,7 +186,7 @@ class NikePlusPHP {
 	/**
 	 * mostRecentActivity()
 	 * collects the data of the latest activity
-	 * 
+	 *
 	 * @return object
 	 */
 	public function mostRecentActivity() {
@@ -197,7 +197,7 @@ class NikePlusPHP {
 	/**
 	 * firstActivity()
 	 * collects the data of the first activity
-	 * 
+	 *
 	 * @return object
 	 */
 	public function firstActivity() {
@@ -221,7 +221,7 @@ class NikePlusPHP {
 	/**
 	 * route()
 	 * collects the data of a specific route
-	 * 
+	 *
 	 * @param string $id the id of the route you wish to get the data for
 	 *
 	 * @return object
@@ -233,10 +233,10 @@ class NikePlusPHP {
 	/**
 	 * toMiles()
 	 * Convert a value from Km in to miles
-	 * 
+	 *
 	 * @param float|string $distance
 	 * @param int $decimalPlaces optional - set the number of decimal places (default is 2), use to improve granularity
-	 * 
+	 *
 	 * @return int
 	 */
 	public function toMiles($distance, $decimalPlaces = 2) {
@@ -282,9 +282,9 @@ class NikePlusPHP {
 	/**
 	 * padNumber()
 	 * pad numbers less than 10 to have a leading 0
-	 * 
+	 *
 	 * @param int $number
-	 * 
+	 *
 	 * @return string
 	 */
 	public function padNumber($number){
@@ -326,7 +326,7 @@ class NikePlusPHP {
 	 * @param int $decimalPlaces optional - set the number of decimal places (default is 2), use to improve granularity
 	 *
 	 * @return string
-	 */    
+	 */
 	public function toTwoDecimalPlaces($number, $decimalPlaces = 2) {
 		return number_format((float) $number, $decimalPlaces, '.', ',');
 	}
